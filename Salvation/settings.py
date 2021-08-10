@@ -17,7 +17,8 @@ import sys, os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # add app path
-sys.path.insert(0, BASE_DIR.joinpath('apps'))
+
+sys.path.insert(0, os.path.join(BASE_DIR, "apps") )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -83,7 +84,7 @@ DATABASES = {
         'NAME': 'salvation',
         'USER': 'root',
         'PASSWORD': 'rootroot',
-        'HOST': '127.0.0.1',
+        'HOST': '192.168.203.17',
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8'}
     }

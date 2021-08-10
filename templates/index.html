@@ -26,7 +26,7 @@
                                             <i class="fas fa-cubes f-40 text-c-purple"></i>
                                         </div>
                                         <div class="col">
-                                            <h3 class="f-w-300" style="color: deepskyblue" >100</h3>
+                                            <h3 class="f-w-300" style="color: deepskyblue">100</h3>
                                             <span class="d-block text-uppercase">TOTAL PROJECT</span>
                                         </div>
                                     </div>
@@ -60,7 +60,7 @@
                                             <i class=" feather icon-file-text f-40 text-c-green"></i>
                                         </div>
                                         <div class="col">
-                                            <h3 class="f-w-300" style="color: deepskyblue" >200</h3>
+                                            <h3 class="f-w-300" style="color: deepskyblue">200</h3>
                                             <span class="d-block text-uppercase">TOTAL TASK</span>
                                         </div>
                                     </div>
@@ -95,25 +95,25 @@
                                         <table class="table table-hover">
                                             <tbody>
                                             {% for user in data_count.userlist %}
-                                            <tr class="unread">
+                                                <tr class="unread">
 
-                                                <td>
-                                                    <img class="rounded-circle" style="width:40px;"
-                                                         src="/static/assets/images/user/avatar-1.jpg"
-                                                         alt="activity-user"></td>
-                                                <td>
-                                                    <h6 class="mb-1">{{ user.username }}</h6>
-                                                </td>
-                                                <td>
-                                                    <h6 class="text-muted"><i
-                                                            class="fas fa-circle text-c-green f-10 m-r-15"></i>11 MAY
-                                                        12:56</h6>
-                                                </td>
-                                                <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a
-                                                        href="#!" class="label theme-bg text-white f-12">Approve</a>
-                                                </td>
-                                            
-                                            </tr>
+                                                    <td>
+                                                        <img class="rounded-circle" style="width:40px;"
+                                                             src="/static/assets/images/user/avatar-1.jpg"
+                                                             alt="activity-user"></td>
+                                                    <td>
+                                                        <h6 class="mb-1">{{ user.username }}</h6>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="text-muted"><i
+                                                                class="fas fa-circle text-c-green f-10 m-r-15"></i>{{ user.last_login }}</h6>
+                                                    </td>
+                                                    <td><a href="#!"
+                                                           class="label theme-bg2 text-white f-12">Reject</a><a
+                                                            href="#!" class="label theme-bg text-white f-12">Approve</a>
+                                                    </td>
+
+                                                </tr>
                                             {% endfor %}
                                             </tbody>
 
