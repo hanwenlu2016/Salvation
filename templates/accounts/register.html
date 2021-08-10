@@ -1,0 +1,81 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} 注册 {% endblock %}
+
+{% block content %}
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="feather icon-user-plus auth-icon"></i>
+                    </div>
+                    <h3 class="mb-4">注册</h3>
+                    <br/>
+
+                    <form role="form" action="{% url 'register' %}" method="post">
+
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input name="username" class="form-control" required="required" maxlength="30"
+                                   placeholder="用户名">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input type="email" name="email" class="form-control" required="required" placeholder="邮箱">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input type="text" name="mobile" class="form-control" required="required" minlength="11"
+                                   placeholder="手机号">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input type="password" name="password1" class="form-control" required="required"
+                                   placeholder="密码">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" name="password2" class="form-control" required="required"
+                                   placeholder="确认密码">
+                        </div>
+
+                        {% if form.errors %}
+                            <div class="form-group">
+                                <p style="color: red">{{ form.errors.username.0 }}</p>   <!-- 获取第一个错误 -->
+                                <p style="color: red">{{ form.errors.password2.0 }}</p>
+                                <p style="color: red">{{ form.errors.mobile.0 }}</p>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group text-left">
+                            <div class="checkbox checkbox-fill d-inline">
+                                <input type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                                <label for="checkbox-fill-a1" class="cr"> 同意 <a href="#">条款</a></label>
+                            </div>
+                        </div>
+                        <button name="register" class="btn btn-primary shadow-2 mb-4" type="submit">提交注册</button>
+                    </form>
+
+                    <p class="mb-0 text-muted">已经有账户了？ <a href="{% url 'login' %}">登录</a></p>
+                    <br/>
+                    <p class="mb-2 text-muted">
+                        &copy; <a target="_blank" href="https://github.com/hanwenlu2016/web-ui">Salvation</a>
+                        - <a target="_blank">
+                        <script type="text/javascript">
+                            var date = new Date();
+                            document.write(date.getFullYear());</script>
+                    </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

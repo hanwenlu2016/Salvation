@@ -1,0 +1,182 @@
+{% extends "layouts/base.html" %}
+{% block title %} 首页 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <!-- [ breadcrumb ] start -->
+
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <br>
+                <div class="page-wrapper">
+
+                    <div class="row">
+                        <!--  Count Data  -->
+
+                        <div class='col-md-3'>
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-auto">
+                                            <i class="fas fa-cubes f-40 text-c-purple"></i>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="f-w-300" style="color: deepskyblue" >100</h3>
+                                            <span class="d-block text-uppercase">TOTAL PROJECT</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='col-md-3'>
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-auto">
+                                            <i class="fas fa-book f-40 text-c-blue "></i>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="f-w-300" style="color: deepskyblue">测试1</h3>
+                                            <span class="d-block text-uppercase">TOTAL CASE</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class='col-md-3'>
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-auto">
+                                            <i class=" feather icon-file-text f-40 text-c-green"></i>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="f-w-300" style="color: deepskyblue" >200</h3>
+                                            <span class="d-block text-uppercase">TOTAL TASK</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='col-md-3'>
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-auto">
+                                            <i class="fas fa-user-friends f-40 "></i>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="f-w-300" style="color: deepskyblue">{{ data_count.member }}</h3>
+                                            <span class="d-block text-uppercase">TOTAL MEMBERS</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-xl-8 col-md-6">
+                            <div class="card Recent-Users">
+                                <div class="card-header">
+                                    <h5>最近活跃</h5>
+                                </div>
+                                <div class="card-block px-0 py-3">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            {% for user in data_count.userlist %}
+                                            <tr class="unread">
+
+                                                <td>
+                                                    <img class="rounded-circle" style="width:40px;"
+                                                         src="/static/assets/images/user/avatar-1.jpg"
+                                                         alt="activity-user"></td>
+                                                <td>
+                                                    <h6 class="mb-1">{{ user.username }}</h6>
+                                                </td>
+                                                <td>
+                                                    <h6 class="text-muted"><i
+                                                            class="fas fa-circle text-c-green f-10 m-r-15"></i>11 MAY
+                                                        12:56</h6>
+                                                </td>
+                                                <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a
+                                                        href="#!" class="label theme-bg text-white f-12">Approve</a>
+                                                </td>
+                                            
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--[ Recent Users ] end-->
+
+                        <!-- [ statistics year chart ] start -->
+                        <div class="col-xl-4 col-md-6">
+                            <div class="card card-event">
+                                <div class="card-block">
+                                    <div class="row align-items-center justify-content-center">
+                                        <div class="col">
+                                            <h5 class="m-0">Upcoming Event</h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label class="label theme-bg2 text-white f-14 f-w-400 float-right">34%</label>
+                                        </div>
+                                    </div>
+                                    <h2 class="mt-3 f-w-300">45<sub class="text-muted f-14">Competitors</sub></h2>
+                                    <h6 class="text-muted mt-4 mb-0">You can participate in event </h6>
+                                    <i class="fab fa-angellist text-c-purple f-50"></i>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-block border-bottom">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-auto">
+                                            <i class="fas fa-user f-30 "></i>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="mt-2 f-w-300">测试5 <sub class="text-muted f-15 ">New Members</sub>
+                                            </h3>
+                                            <span class="d-block text-uppercase">THIS WEEK</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-block">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-auto">
+                                            <i class="fas fa-book f-30 text-c-blue "></i>
+                                        </div>
+                                        <div class="col">
+                                            <h3 class="mt-2 f-w-300">测试6 <sub class="text-muted f-15 ">Books Lent</sub>
+                                            </h3>
+                                            <span class="d-block text-uppercase">THIS WEEK</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

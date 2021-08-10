@@ -1,0 +1,35 @@
+<!-- NOT IMPLEMENTED -->
+<!-- {% load static %} -->
+
+
+<nav class="navbar navbar-light  justify-content-between">
+    <div class="col-6">
+    </div>
+
+
+    <div class="col-2 ">
+
+        <div class="nav-item dropdown float-right">
+
+
+            <h6
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdown"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                <img src="/static/assets/images/user/avatar-1.jpg " style="width:30px;height:30px;border-radius:50%;"
+                     alt="">
+            </h6>
+
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
+            </div>
+
+
+        </div>
+    </div>
+</nav>
