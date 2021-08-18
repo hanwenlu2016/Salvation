@@ -1,0 +1,134 @@
+{% extends "layouts/base.html" %}
+{% load project_extras %}
+{% block title %} 项目列表 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ basic-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>项目列表</h5>
+                                </div>
+
+                                <div class="card-block">
+                                    <div class='row'>
+                                        <div class="col-8">
+
+                                        </div>
+
+                                        <div class="col-4">
+                                            <form class="form-inline mb-2">
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="search" ,
+                                                           id='search' ,
+                                                           placeholder="项目名称 / 创建人" ,
+                                                           value=>
+                                                </div>
+                                                <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive ">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>项目名称</th>
+                                                <th>项目状态</th>
+                                                <th>项目版本</th>
+                                                <th>项目负责人</th>
+                                                <th>参与人员</th>
+                                                <th>创建时间</th>
+                                                <th>更新时间</th>
+                                                <th>维护人</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {% for p in project %}
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>{{ p.project_name }}</td>
+                                                    {% if p.isenabled %}
+                                                        <td>正常</td>
+                                                    {% else %}
+                                                        <td>结项</td>
+                                                    {% endif %}
+                                                    <!-- <td>{{book.updated|date:"Y/m/d H:i" }}</td> -->
+                                                    <td>{{ p.version }}</td>
+
+                                                    {% if p.prjcet_personliable.name == None %}
+                                                        <td>{{ p.prjcet_personliable.username }}</td>
+                                                    {% else %}
+                                                        <td>{{ p.prjcet_personliable.name }}</td>
+                                                    {% endif %}
+                                                    <td>{{ p.prjcet_participant.count }}</td>
+
+                                                    <td>{{ p.createtime }}</td>
+                                                    <td>{{ p.updatetime }}</td>
+                                                    <td>{{ p.updater }}</td>
+                                                    <td>
+                                                        <a href="" class="badge badge-warning"><i
+                                                                class="feather icon-eye"></i>&nbsp;查看</a>
+                                                        <a href="" class="badge badge-info"><i
+                                                                class="feather icon-edit"></i>&nbsp;修改</a>&nbsp;
+                                                        <a href="" class="badge badge-danger"><i
+                                                                class="feather icon-trash-2"></i>&nbsp;删除</a>&nbsp;
+                                                    </td>
+
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class='col-4'>
+                                            <a href="" class='btn btn-primary'>新增项目</a>
+                                        </div>
+                                        <div class='col-8'>
+                                            {% show_pagination %}
+                                        </div>
+                                        <div class='col-8'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

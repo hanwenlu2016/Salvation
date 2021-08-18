@@ -15,7 +15,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         data_count = {
-            "userlist": Users.objects.all().order_by('last_login')[:5], # 只取登录时间的默认5
+            "userlist": Users.objects.all().order_by('-last_login')[:5], # 只取登录时间的默认5
             "member": Users.objects.all().count(),
         }
         self.context['data_count'] = data_count
