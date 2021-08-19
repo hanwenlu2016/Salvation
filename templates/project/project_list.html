@@ -35,6 +35,33 @@
                                     <div class='row'>
                                         <div class="col-8">
 
+                                            <div class="col-6">
+                                                <div class="btn-group ">
+                                                    <a href="" class='btn btn-primary'>新增项目</a>
+                                                </div>
+
+                                                <div class="btn-group ">
+                                                    {% if created_by == '' %}
+                                                        <button class="btn btn-light dropdown-toggle" type="button"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">项目状态
+                                                        </button>
+                                                    {% else %}
+                                                        <button class="btn btn-light dropdown-toggle" type="button"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">{{ created_by }} </button>
+                                                    {% endif %}
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'prlist' %}?created_by={{ True }}&search={{ search }}">正常</a>
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'prlist' %}?created_by={{ False }}&search={{ search }}">结项</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
                                         </div>
 
                                         <div class="col-4">
@@ -44,7 +71,7 @@
                                                            class="form-control"
                                                            name="search" ,
                                                            id='search' ,
-                                                           placeholder="项目名称 / 创建人" ,
+                                                           placeholder="项目名称/负责人/创建人" ,
                                                            value=>
                                                 </div>
                                                 <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
@@ -56,7 +83,7 @@
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th>id</th>
                                                 <th>项目名称</th>
                                                 <th>项目状态</th>
                                                 <th>项目版本</th>
@@ -65,23 +92,21 @@
                                                 <th>创建时间</th>
                                                 <th>更新时间</th>
                                                 <th>维护人</th>
-                                                <th>操作</th>
+                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
 
                                             {% for p in project %}
                                                 <tr>
-                                                    <th scope="row">1</th>
+                                                    <th scope="row">{{ p.id }}</th>
                                                     <td>{{ p.project_name }}</td>
                                                     {% if p.isenabled %}
                                                         <td>正常</td>
                                                     {% else %}
                                                         <td>结项</td>
                                                     {% endif %}
-                                                    <!-- <td>{{book.updated|date:"Y/m/d H:i" }}</td> -->
                                                     <td>{{ p.version }}</td>
-
                                                     {% if p.prjcet_personliable.name == None %}
                                                         <td>{{ p.prjcet_personliable.username }}</td>
                                                     {% else %}
@@ -93,12 +118,15 @@
                                                     <td>{{ p.updatetime }}</td>
                                                     <td>{{ p.updater }}</td>
                                                     <td>
-                                                        <a href="" class="badge badge-warning"><i
-                                                                class="feather icon-eye"></i>&nbsp;查看</a>
-                                                        <a href="" class="badge badge-info"><i
-                                                                class="feather icon-edit"></i>&nbsp;修改</a>&nbsp;
-                                                        <a href="" class="badge badge-danger"><i
-                                                                class="feather icon-trash-2"></i>&nbsp;删除</a>&nbsp;
+                                                        <button href="#" type="button" class="btn btn-info"><i
+                                                                class="feather icon-eye"></i>查看
+                                                        </button>
+                                                        <button href="#" type="button" class="btn btn-success"><i
+                                                                class="feather icon-edit"></i>修改
+                                                        </button>
+                                                        <button href="#" type="button" class="btn btn-danger"><i
+                                                                class="feather icon-trash-2"></i>删除
+                                                        </button>
                                                     </td>
 
                                                 </tr>
@@ -109,7 +137,7 @@
                                     </div>
                                     <div class="row">
                                         <div class='col-4'>
-                                            <a href="" class='btn btn-primary'>新增项目</a>
+                                            <a >合计 {{ count_total }} 条</a>
                                         </div>
                                         <div class='col-8'>
                                             {% show_pagination %}

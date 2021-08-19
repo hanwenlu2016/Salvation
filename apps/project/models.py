@@ -25,6 +25,7 @@ class Project(models.Model):
     """
     项目表
     """
+
     project_name = models.CharField(max_length=100, unique=True, verbose_name='项目名称')
     isenabled = models.BooleanField(default=True, verbose_name='项目状态')
     descr = models.TextField(null=True, blank=True, verbose_name='项目描述')

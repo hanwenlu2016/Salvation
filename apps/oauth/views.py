@@ -15,7 +15,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         data_count = {
-            "userlist": Users.objects.all().order_by('-last_login')[:5], # 只取登录时间的默认5
+            "userlist": Users.objects.all().order_by('-last_login')[:5],  # 只取登录时间的默认5
             "member": Users.objects.all().count(),
         }
         self.context['data_count'] = data_count
@@ -54,3 +54,33 @@ class SignUpView(CreateView):
         :return:
         """
         return self.render_to_response({'form': form, })
+
+
+# Handle Errors
+
+def page_not_found(request, exception):
+    context = {}
+    response = render(request, "errors/404.html", context=context)
+    response.status_code = 404
+    return response
+
+
+def server_error(request, exception=None):
+    context = {}
+    response = render(request, "errors/500.html", context=context)
+    response.status_code = 500
+    return response
+
+
+def permission_denied(request, exception=None):
+    context = {}
+    response = render(request, "errors/403.html", context=context)
+    response.status_code = 403
+    return response
+
+
+def bad_request(request, exception=None):
+    context = {}
+    response = render(request, "errors/400.html", context=context)
+    response.status_code = 400
+    return response

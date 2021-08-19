@@ -13,17 +13,23 @@ class ProjectListView(LoginRequiredMixin, ListView):
     template_name = "project/project_list.html"
     search_value = ""
     order_field = "-updater"
+    created_by = ''
     pagenum = 5  # 每页分页数据条数
 
     def get_queryset(self):
         search = self.request.GET.get("search")
         order_by = self.request.GET.get("orderby")
+        filter_isenabled = self.request.GET.get("created_by")
 
         if order_by:
             all_pro = Project.objects.all().order_by(order_by)
             self.order_field = order_by
         else:
             all_pro = Project.objects.all().order_by(self.order_field)
+
+        if filter_isenabled:
+            self.created_by = filter_isenabled
+            all_pro = Project.objects.filter(isenabled=self.created_by)
 
         if search:
             # 项目名称 、创建人、项目负责人、项目负责人姓名查询
@@ -46,4 +52,5 @@ class ProjectListView(LoginRequiredMixin, ListView):
         context['search'] = self.search_value
         context['orderby'] = self.order_field
         context['objects'] = self.get_queryset()
+        context['created_by'] = self.created_by
         return context
