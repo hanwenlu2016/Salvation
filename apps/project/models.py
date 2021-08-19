@@ -1,0 +1,59 @@
+import datetime
+
+from django.db import models
+from oauth.models import Users
+
+
+class DeployInfo(models.Model):
+    """
+    部署表
+    """
+    prjname = models.CharField(max_length=100, unique=True, verbose_name='项目名称')
+    prjalias = models.CharField(max_length=32, null=True, blank=True, verbose_name='项目别名')
+    deploypath = models.CharField(max_length=200, null=True, blank=True, verbose_name='部署路径')
+    depldescr = models.TextField(null=True, blank=True, verbose_name='部署描述')
+
+    def __str__(self):
+        return self.prjname
+
+    class Meta:
+        verbose_name = '部署信息'
+        verbose_name_plural = verbose_name
+
+
+class Project(models.Model):
+    """
+    项目表
+    """
+    project_name = models.CharField(max_length=100, unique=True, verbose_name='项目名称')
+    isenabled = models.BooleanField(default=True, verbose_name='项目状态')
+    descr = models.TextField(null=True, blank=True, verbose_name='项目描述')
+    version = models.CharField(max_length=32, null=True, blank=True, editable=True, verbose_name='版本版本')
+    deployinfos = models.ForeignKey(DeployInfo, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='部署信息')
+    prjcet_personliable = models.ForeignKey(Users, null=True, blank=True, on_delete=models.SET_NULL,related_name='user_prjcet',
+                                           verbose_name='所属负责人', )
+
+    prjcet_participant = models.ManyToManyField(Users,  blank=True,verbose_name='项目参与者', )
+
+    createtime = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updatetime = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    creator = models.CharField(max_length=32, verbose_name='创建人')
+    updater = models.CharField(max_length=32, null=True, blank=True,verbose_name='更新人')
+
+
+    def save(self, *args, **kwargs):
+
+        if not self.id:
+            self.createtime = datetime.datetime.now()
+            self.updatetime = datetime.datetime.now()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.project_name
+
+    class Meta:
+        verbose_name = '项目信息'
+        verbose_name_plural = verbose_name
+
+
