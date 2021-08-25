@@ -1,4 +1,5 @@
 {% extends "layouts/base.html" %}
+{% load static %}
 {% block title %} 首页 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
@@ -108,11 +109,11 @@
                                                     <td>
                                                         {% if user.gender == 'female' %}
                                                             <img class="rounded-circle" style="width:40px;"
-                                                                 src="/static/assets/images/user/avatar-1.jpg"
+                                                                 src="{% static 'assets/images/user/avatar-1.jpg'%}"
                                                                  alt="activity-user">
                                                         {% else %}
                                                             <img class="rounded-circle" style="width:40px;"
-                                                                 src="/static/assets/images/user/avatar-2.jpg"
+                                                                 src="{% static 'assets/images/user/avatar-2.jpg'%}"
                                                                  alt="activity-user">
                                                         {% endif %}
                                                     <td>

@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from django.core.paginator import Paginator
 
+from project.forms import  ProjectCreateForm
 from project.models import Project
 
 
@@ -54,3 +55,35 @@ class ProjectListView(LoginRequiredMixin, ListView):
         context['objects'] = self.get_queryset()
         context['created_by'] = self.created_by
         return context
+
+
+class ProjectDetailView(LoginRequiredMixin, DetailView):
+    model = Project
+    template_name = "project/project_detail.html"
+
+
+class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
+    """
+    项目的参加人员
+    """
+    model = Project
+    context_object_name = 'project_particpant'
+    template_name = "project/project_particpant_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectParticpantDetailView, self).get_context_data(**kwargs)
+        related_member = Project.objects.get(id=self.get_object().id)
+        context['project_particpant'] = related_member
+        return context
+
+
+class ProjectCreateView(LoginRequiredMixin, CreateView):
+    """
+    项目的参加人员
+    """
+    model = Project
+    form_class=ProjectCreateForm
+    template_name = "project/project_add.html"
+
+    def post(self, request, *args, **kwargs):
+        pass

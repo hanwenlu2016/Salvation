@@ -17,11 +17,11 @@
                     aria-haspopup="true"
                     aria-expanded="false">
                 {% if user.gender == 'female' %}
-                    <img src="/static/assets/images/user/avatar-1.jpg "
+                    <img src="{% static '/assets/images/user/avatar-1.jpg' %}"
                          style="width:30px;height:30px;border-radius:50%;"
                          alt="">
                 {% else %}
-                    <img src="/static/assets/images/user/avatar-2.jpg "
+                    <img src="{% static '/assets/images/user/avatar-2.jpg' %}"
                          style="width:30px;height:30px;border-radius:50%;"
                          alt="">
                 {% endif %}

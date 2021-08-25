@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %}
+{% load project_extras  static %}
+{% block title %} {{ object.project_name }} 的信息 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="page-header-title">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-header">
+        <h5>项目列表</h5>
+    </div>
+
+    <p>{{ object.project_name }}</p>
+    <p>{{ object.deployinfos }}</p>
+    <p>{{ object.isenabled }}</p>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load project_extras %}
+{% load project_extras static  %}
 {% block title %} 项目列表 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
@@ -28,7 +28,9 @@
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5>项目列表</h5>
+                                    <h5><span><i  class="feather icon-home">  <a href="{% url 'index' %}">首页</a></i></span>
+                                    </h5>
+                                    <span><i  class="fa fa-map-marker"></i> 项目列表</span>
                                 </div>
 
                                 <div class="card-block">
@@ -37,7 +39,7 @@
 
                                             <div class="col-6">
                                                 <div class="btn-group ">
-                                                    <a href="" class='btn btn-primary'>新增项目</a>
+                                                    <a href="{% url 'project_add' %}" class='btn btn-primary'>新增项目</a>
                                                 </div>
 
                                                 <div class="btn-group ">
@@ -52,6 +54,7 @@
                                                                 aria-expanded="false">{{ created_by }} </button>
                                                     {% endif %}
                                                     <div class="dropdown-menu">
+
                                                         <a class="dropdown-item"
                                                            href="{% url 'prlist' %}?created_by={{ True }}&search={{ search }}">正常</a>
                                                         <a class="dropdown-item"
@@ -100,7 +103,8 @@
                                             {% for p in project %}
                                                 <tr>
                                                     <th scope="row">{{ p.id }}</th>
-                                                    <td>{{ p.project_name }}</td>
+                                                    <td><a href="{% url 'prldetai' p.pk %}">{{ p.project_name }}</a>
+                                                    </td>
                                                     {% if p.isenabled %}
                                                         <td>正常</td>
                                                     {% else %}
@@ -112,20 +116,30 @@
                                                     {% else %}
                                                         <td>{{ p.prjcet_personliable.name }}</td>
                                                     {% endif %}
-                                                    <td>{{ p.prjcet_participant.count }}</td>
+{#                                                    <td>{{ p.prjcet_participant.all|truncatewords:30 }}</td>#}
+
+                                                    <td><a href="{% url 'project_particpant' p.pk %}">{{ p.prjcet_participant.count }}</a></td>
 
                                                     <td>{{ p.createtime }}</td>
                                                     <td>{{ p.updatetime }}</td>
                                                     <td>{{ p.updater }}</td>
                                                     <td>
-                                                        <button href="#" type="button" class="btn btn-info"><i
-                                                                class="feather icon-eye"></i>查看
-                                                        </button>
                                                         <button href="#" type="button" class="btn btn-success"><i
                                                                 class="feather icon-edit"></i>修改
                                                         </button>
-                                                        <button href="#" type="button" class="btn btn-danger"><i
-                                                                class="feather icon-trash-2"></i>删除
+                                                        <script>
+                                                            function del() {
+                                                                var msg = "您真的确定要删除吗？\n\n请确认！";
+                                                                if (confirm(msg) == true) {
+                                                                    return true;
+                                                                } else {
+                                                                    return false;
+                                                                }
+                                                            }
+                                                        </script>
+                                                        <button href="#" type="button" class="btn btn-danger" onclick="javascript:return del();"><i
+                                                                class=" feather icon-trash-2
+                                                        "></i>删除
                                                         </button>
                                                     </td>
 
@@ -137,7 +151,7 @@
                                     </div>
                                     <div class="row">
                                         <div class='col-4'>
-                                            <a >合计 {{ count_total }} 条</a>
+                                            <a>合计 {{ count_total }} 条</a>
                                         </div>
                                         <div class='col-8'>
                                             {% show_pagination %}

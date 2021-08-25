@@ -1,0 +1,90 @@
+{% extends "layouts/base.html" %}
+{% load project_extras  static %}
+{% block title %} {{ object.project_name }} 参人员 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="page-header">
+                <div class="page-block">
+                    <!-- Title -->
+                    <div class="row align-items-center">
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ basic-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="m-b-10">
+                                        <span><i  class="feather icon-box">  <a href="{% url 'prlist' %}">项目列表</a></i></span>
+                                    </h5>
+                                        <span><i class="fa fa-map-marker"></i> 参与人员</span>
+                                </div>
+
+
+                                <div class="card-block ">
+                                    <div class='row'>
+                                        <div class="col-12 d-flex justify-content-center text-center">
+                                            <table class="table table-sm  ">
+                                                <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">性别</th>
+                                                    <th scope="col">姓名</th>
+                                                    <th scope="col">部门</th>
+                                                    <th scope="col">职位</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for project in project_particpant.prjcet_participant.all %}
+
+                                                    <tr>
+                                                        <td>
+                                                            {% if project.gender == 'female' %}
+                                                                <img class="rounded-circle" style="width:40px;"
+                                                                     src="{% static 'assets/images/user/avatar-1.jpg' %}"
+                                                                     alt="activity-user">
+                                                            {% else %}
+                                                                <img class="rounded-circle" style="width:40px;"
+                                                                     src="{% static 'assets/images/user/avatar-2.jpg' %}"
+                                                                     alt="activity-user">
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ project.name }}</td>
+                                                        <td>{{ project.dep }}</td>
+                                                        <td>{{ project.post }}</td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <a href="{% url 'prlist' %}" class='btn btn-primary'>返回列表</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}
