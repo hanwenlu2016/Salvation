@@ -11,9 +11,18 @@ from .models import Project
 class ProjectCreateForm(forms.ModelForm):
     class Meta:
         model = Project
-        exclude=['createtime','updatetime','creator','updater']
-        # fields = ('project_name,isenabled,descr,version,deployinfos,creator,updater,')
+        exclude = ['createtime', 'updatetime', 'creator', 'updater']
         fields = '__all__'
 
-    def save(self, commit=True):
-        pass
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ProjectCreateForm, self).__init__(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        obj = super(ProjectCreateForm, self).save(commit=False)
+        if self.request:
+            print(self.request)
+            obj.creator = self.request.user
+            obj.updater = self.request.user
+            obj.save()
+        return obj

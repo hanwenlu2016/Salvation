@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.views.generic import TemplateView, CreateView, ListView, DetailView
+from django.shortcuts import redirect
+from django.views.generic import CreateView, ListView, DetailView
 from django.core.paginator import Paginator
-
-from project.forms import  ProjectCreateForm
+from django.contrib.messages.views import messages
+from project.forms import ProjectCreateForm
 from project.models import Project
 
 
@@ -79,11 +80,14 @@ class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     """
-    项目的参加人员
+    添加项目
     """
     model = Project
-    form_class=ProjectCreateForm
+    form_class = ProjectCreateForm
     template_name = "project/project_add.html"
 
-    def post(self, request, *args, **kwargs):
-        pass
+    def get_form_kwargs(self):
+        # Ensure the current `request` is provided to ProjectCreateForm.
+        kwargs = super(ProjectCreateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
