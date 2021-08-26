@@ -1,0 +1,163 @@
+{% extends "layouts/base.html" %}
+{% load project_extras %}
+{% load  static %}
+{% block title %} 用户列表 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ basic-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><span><i class="feather icon-home">  <a
+                                            href="{% url 'index' %}">首页</a></i></span>
+                                    </h5>
+                                    <span><i class="fa fa-map-marker"></i> 用户列表</span>
+                                </div>
+
+                                <div class="card-block">
+                                    <div class='row'>
+                                        <div class="col-8">
+
+                                            <div class="col-6">
+                                                <div class="btn-group ">
+                                                    <a href="" class='btn btn-primary'>新增用户</a>
+                                                </div>
+
+                                                <div class="btn-group ">
+                                                    {% if created_by == '' %}
+                                                        <button class="btn btn-light dropdown-toggle" type="button"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">项目状态
+                                                        </button>
+                                                    {% else %}
+                                                        <button class="btn btn-light dropdown-toggle" type="button"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">{{ created_by }} </button>
+                                                    {% endif %}
+                                                    <div class="dropdown-menu">
+
+{#                                                        <a class="dropdown-item"#}
+{#                                                           href="{% url 'prlist' %}?created_by={{ True }}&search={{ search }}">正常</a>#}
+{#                                                        <a class="dropdown-item"#}
+{#                                                           href="{% url 'prlist' %}?created_by={{ False }}&search={{ search }}">结项</a>#}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="col-4">
+                                            <form class="form-inline mb-2">
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="search" ,
+                                                           id='search' ,
+                                                           placeholder="项目名称/负责人/创建人" ,
+                                                           value=>
+                                                </div>
+                                                <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive ">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>用户名</th>
+                                                <th>姓名</th>
+                                                <th>性别</th>
+                                                <th>部门</th>
+                                                <th>职位</th>
+                                                <th>出生年月</th>
+                                                <th>手机号</th>
+                                                <th>邮箱</th>
+                                                <th>是否管理员</th>
+                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {% for u in users %}
+                                                <tr>
+                                                    <th scope="row">{{ u.id }}</th>
+{#                                                    <td><a href="{% url 'userlist' u.pk %}">{{ u.username }}</a></td>#}
+                                                    <td>{{ u.username }}</td>
+                                                    <td>{{ u.name|default:u.username  }}</td>
+                                                    {% if u.gender == 'male' %}
+                                                        <td>男</td>
+                                                        {% else %}
+                                                        <td>女</td>
+                                                    {% endif %}
+                                                    <td>{{ u.dep|default:'' }}</td>
+                                                    <td>{{ u.post|default:'' }}</td>
+                                                    <td>{{ u.birthday|default:'' }}</td>
+                                                    <td>{{ u.mobile|default:''}}</td>
+                                                    <td>{{ u.email|default:'' }}</td>
+                                                    <td>{{ u.is_superuser|default:"否" }}</td>
+                                                    <td>
+{#                                                        <button type="button" class="btn btn-success"#}
+{#                                                                onclick="window.location.href='{% url 'userlist'  %}';">#}
+{#                                                            <i class="feather icon-edit"></i>更新#}
+{#                                                        </button>#}
+{##}
+{#                                                        <button href="#" type="button" class="btn btn-danger"#}
+{#                                                                onclick="window.location.href='{% url 'userlist' %}';">#}
+{#                                                            <i class=" feather icon-trash-2"></i>删除#}
+{#                                                        </button>#}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class='col-4'>
+                                            <a>合计 {{ count_total }} 条</a>
+                                        </div>
+                                        <div class='col-8'>
+                                            {% show_pagination %}
+                                        </div>
+                                        <div class='col-8'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}
