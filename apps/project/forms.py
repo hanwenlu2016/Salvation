@@ -26,3 +26,13 @@ class ProjectCreateForm(forms.ModelForm):
             obj.updater = self.request.user
             obj.save()
         return obj
+
+
+class ProjectUpdateForm(ProjectCreateForm):
+
+    def save(self, *args, **kwargs):
+        obj = super(ProjectCreateForm, self).save(commit=False)
+        if self.request:
+            obj.updater = self.request.user.username
+            obj.save()
+        return obj

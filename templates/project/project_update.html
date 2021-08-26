@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% load  static crispy_forms_tags %}
-{% block title %} 新增项目 {% endblock %}
+{% block title %} 更新项目 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -31,13 +31,13 @@
                                         <span><i class="feather icon-box">  <a
                                                 href="{% url 'prlist' %}">项目列表</a></i></span>
                                     </h5>
-                                    <span><i class="fa fa-map-marker"></i> 新增项目</span>
+                                    <span><i class="fa fa-map-marker"></i> 更新项目</span>
                                 </div>
                                 <div class="card-block table-border-style">
                                     <form method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         {{ form|crispy }}
-                                        <button type="submit" class="btn btn-primary">新增</button>
+                                        <button type="submit" class="btn btn-primary">更新</button>
                                         <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'prlist' %}';" >取消</button>
                                     </form>
                                 </div>

@@ -1,30 +1,118 @@
 {% extends "layouts/base.html" %}
 {% load project_extras  static %}
-{% block title %} {{ object.project_name }} 的信息 {% endblock %}
+{% block title %} {{ object.project_name }} 项目详情 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="page-header">
+                <div class="page-block">
+                    <!-- Title -->
+                    <div class="row align-items-center">
 
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <div class="page-header-title">
                     </div>
+                </div>
+            </div>
+            <br>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ basic-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="m-b-10">
+                                        <span><i class="feather icon-box">  <a
+                                                href="{% url 'prlist' %}">项目列表</a></i></span>
+                                    </h5>
+                                    <span><i class="fa fa-map-marker"></i> 项目详情</span>
+                                </div>
+
+
+                                <div class="card-block ">
+                                    <div class='row'>
+                                        <div class="col-12 d-flex justify-content-center text-center">
+                                            <table class="table table-sm  ">
+                                                <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">名称</th>
+                                                    <th scope="col">详情</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                <tr>
+                                                    <td class="text-success">项目名称</td>
+                                                    <td>{{ project_info.project_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success">项目状态</td>
+                                                    {% if project_info.isenabled %}
+                                                        <td>正常</td>
+                                                    {% else %}
+                                                        <td>结项</td>
+                                                    {% endif %}
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success">项目版本</td>
+                                                    <td>{{ project_info.version }}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success">部署信息</td>
+                                                    <td>{{ project_info.deployinfos }}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success">项目参与人员</td>
+                                                    <td>{{ project_info.prjcet_participant.all |join:", " }}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success">项目负责人</td>
+                                                    <td>{{ project_info.prjcet_personliable }}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success">项目创建人</td>
+                                                    <td>{{ project_info.creator }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success">项目更新人</td>
+                                                    <td>{{ project_info.updater }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-success">项目创建时间</td>
+                                                    <td>{{ project_info.createtime }}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td class="text-success">最后更新时间</td>
+                                                    <td>{{ project_info.updatetime }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <a href="{% url 'prlist' %}" class='btn btn-primary'>返回</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="card-header">
-        <h5>项目列表</h5>
-    </div>
-
-    <p>{{ object.project_name }}</p>
-    <p>{{ object.deployinfos }}</p>
-    <p>{{ object.isenabled }}</p>
 
 {% endblock content %}
 

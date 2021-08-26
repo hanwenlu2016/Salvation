@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import redirect
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView,UpdateView
 from django.core.paginator import Paginator
 from django.contrib.messages.views import messages
-from project.forms import ProjectCreateForm
+from project.forms import ProjectCreateForm, ProjectUpdateForm
 from project.models import Project
 
 
@@ -62,6 +62,11 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
     model = Project
     template_name = "project/project_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        project_info = Project.objects.get(id=self.get_object().id)
+        context['project_info'] = project_info
+        return context
 
 class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
     """
@@ -77,7 +82,6 @@ class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
         context['project_particpant'] = related_member
         return context
 
-
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     """
     添加项目
@@ -89,5 +93,19 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     def get_form_kwargs(self):
         # Ensure the current `request` is provided to ProjectCreateForm.
         kwargs = super(ProjectCreateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    更新项目
+    """
+    model = Project
+    form_class = ProjectUpdateForm
+    template_name = "project/project_update.html"
+
+    def get_form_kwargs(self):
+        # Ensure the current `request` is provided to ProjectCreateForm.
+        kwargs = super(ProjectUpdateView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs

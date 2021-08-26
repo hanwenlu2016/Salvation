@@ -124,7 +124,7 @@
                                                     <td>{{ p.updatetime }}</td>
                                                     <td>{{ p.updater }}</td>
                                                     <td>
-                                                        <button href="#" type="button" class="btn btn-success"><i
+                                                        <button  type="button" class="btn btn-success" onclick="window.location.href='{% url 'project_update' p.id %}';" ><i
                                                                 class="feather icon-edit"></i>修改
                                                         </button>
                                                         <script>
