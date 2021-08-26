@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load project_extras static  %}
+{% load project_extras static %}
 {% block title %} 项目列表 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
@@ -28,9 +28,10 @@
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5><span><i  class="feather icon-home">  <a href="{% url 'index' %}">首页</a></i></span>
+                                    <h5><span><i class="feather icon-home">  <a
+                                            href="{% url 'index' %}">首页</a></i></span>
                                     </h5>
-                                    <span><i  class="fa fa-map-marker"></i> 项目列表</span>
+                                    <span><i class="fa fa-map-marker"></i> 项目列表</span>
                                 </div>
 
                                 <div class="card-block">
@@ -116,36 +117,28 @@
                                                     {% else %}
                                                         <td>{{ p.prjcet_personliable.name }}</td>
                                                     {% endif %}
-{#                                                    <td>{{ p.prjcet_participant.all|truncatewords:30 }}</td>#}
+                                                    {#                                                    <td>{{ p.prjcet_participant.all|truncatewords:30 }}</td>#}
 
-                                                    <td><a href="{% url 'project_particpant' p.pk %}">{{ p.prjcet_participant.count }}</a></td>
+                                                    <td>
+                                                        <a href="{% url 'project_particpant' p.pk %}">{{ p.prjcet_participant.count }}</a>
+                                                    </td>
 
                                                     <td>{{ p.createtime }}</td>
                                                     <td>{{ p.updatetime }}</td>
                                                     <td>{{ p.updater }}</td>
                                                     <td>
-                                                        <button  type="button" class="btn btn-success" onclick="window.location.href='{% url 'project_update' p.id %}';" ><i
-                                                                class="feather icon-edit"></i>修改
+                                                        <button type="button" class="btn btn-success"
+                                                                onclick="window.location.href='{% url 'project_update' p.id %}';">
+                                                            <i class="feather icon-edit"></i>更新
                                                         </button>
-                                                        <script>
-                                                            function del() {
-                                                                var msg = "您真的确定要删除吗？\n\n请确认！";
-                                                                if (confirm(msg) == true) {
-                                                                    return true;
-                                                                } else {
-                                                                    return false;
-                                                                }
-                                                            }
-                                                        </script>
-                                                        <button href="#" type="button" class="btn btn-danger" onclick="javascript:return del();"><i
-                                                                class=" feather icon-trash-2
-                                                        "></i>删除
+
+                                                        <button href="#" type="button" class="btn btn-danger"
+                                                                onclick="window.location.href='{% url 'prlist_delete' p.id %}';">
+                                                            <i class=" feather icon-trash-2"></i>删除
                                                         </button>
                                                     </td>
-
                                                 </tr>
                                             {% endfor %}
-
                                             </tbody>
                                         </table>
                                     </div>

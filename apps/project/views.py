@@ -1,7 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.views.generic import CreateView, ListView, DetailView,UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, ListView, DetailView,UpdateView,DeleteView
 from django.core.paginator import Paginator
 from django.contrib.messages.views import messages
 from project.forms import ProjectCreateForm, ProjectUpdateForm
@@ -9,7 +11,6 @@ from project.models import Project
 
 
 class ProjectListView(LoginRequiredMixin, ListView):
-    login_url = 'login'
     model = Project
     context_object_name = 'project'
     template_name = "project/project_list.html"
@@ -59,6 +60,9 @@ class ProjectListView(LoginRequiredMixin, ListView):
 
 
 class ProjectDetailView(LoginRequiredMixin, DetailView):
+    """
+    项目详情
+    """
     model = Project
     template_name = "project/project_detail.html"
 
@@ -70,7 +74,7 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
 
 class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
     """
-    项目的参加人员
+    项目的参加人员 详情
     """
     model = Project
     context_object_name = 'project_particpant'
@@ -109,3 +113,16 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
         kwargs = super(ProjectUpdateView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs
+
+
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+    """
+    删除项目
+    """
+    model = Project
+    success_url = reverse_lazy('prlist')
+    #success_url = ""
+
+
+
+
