@@ -8,9 +8,10 @@ from django.core.paginator import Paginator
 from django.contrib.messages.views import messages
 from project.forms import ProjectCreateForm, ProjectUpdateForm
 from project.models import Project
+from mixins.loginmixin import LoginMixin
 
 
-class ProjectListView(LoginRequiredMixin, ListView):
+class ProjectListView(LoginMixin, ListView):
     model = Project
     context_object_name = 'project'
     template_name = "project/project_list.html"
@@ -59,7 +60,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ProjectDetailView(LoginRequiredMixin, DetailView):
+class ProjectDetailView(LoginMixin, DetailView):
     """
     项目详情
     """
@@ -72,7 +73,7 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
         context['project_info'] = project_info
         return context
 
-class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
+class ProjectParticpantDetailView(LoginMixin, DetailView):
     """
     项目的参加人员 详情
     """
@@ -86,7 +87,7 @@ class ProjectParticpantDetailView(LoginRequiredMixin, DetailView):
         context['project_particpant'] = related_member
         return context
 
-class ProjectCreateView(LoginRequiredMixin, CreateView):
+class ProjectCreateView(LoginMixin, CreateView):
     """
     添加项目
     """
@@ -100,7 +101,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         kwargs.update({'request': self.request})
         return kwargs
 
-class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+class ProjectUpdateView(LoginMixin, UpdateView):
     """
     更新项目
     """
@@ -115,13 +116,13 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
         return kwargs
 
 
-class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+class ProjectDeleteView(LoginMixin, DeleteView):
     """
     删除项目
     """
     model = Project
     success_url = reverse_lazy('prlist')
-    #success_url = ""
+
 
 
 

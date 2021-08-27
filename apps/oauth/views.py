@@ -1,17 +1,16 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView
 from django.core.paginator import Paginator
-from .models import Position
 
-from .models import Users
-
+from mixins.loginmixin import LoginMixin
+from .models import Users, Position
 from oauth.forms import SignUpForm
 
 
-class HomeView(LoginRequiredMixin, TemplateView):
+class HomeView(LoginMixin, TemplateView):
     template_name = "index.html"
     context = {}
 
@@ -45,7 +44,7 @@ class SignUpView(CreateView):
 
     template_name = 'accounts/register.html'
     form_class = SignUpForm
-    success_url = '/auth/login'
+    success_url =  reverse_lazy('login')
 
     def form_invalid(self, form):
         """
@@ -56,8 +55,7 @@ class SignUpView(CreateView):
         return self.render_to_response({'form': form, })
 
 
-
-class UserListView(LoginRequiredMixin,ListView):
+class UserListView(LoginMixin, ListView):
     model = Users
     context_object_name = 'users'
     template_name = "oauth/user_list.html"
@@ -104,6 +102,8 @@ class UserListView(LoginRequiredMixin,ListView):
         context['objects'] = self.get_queryset()
         context['created_by'] = self.created_by
         return context
+
+
 # Handle Errors
 
 def page_not_found(request, exception):
