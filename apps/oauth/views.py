@@ -2,12 +2,12 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView
 from django.core.paginator import Paginator
 
 from mixins.loginmixin import LoginMixin
 from .models import Users, Position
-from oauth.forms import SignUpForm
+from oauth.forms import SignUpForm, UserCreateForm, UserUpdateForm
 
 
 class HomeView(LoginMixin, TemplateView):
@@ -44,7 +44,7 @@ class SignUpView(CreateView):
 
     template_name = 'accounts/register.html'
     form_class = SignUpForm
-    success_url =  reverse_lazy('login')
+    success_url = reverse_lazy('login')
 
     def form_invalid(self, form):
         """
@@ -56,6 +56,10 @@ class SignUpView(CreateView):
 
 
 class UserListView(LoginMixin, ListView):
+    """
+    用户列表 视图
+    """
+
     model = Users
     context_object_name = 'users'
     template_name = "oauth/user_list.html"
@@ -67,7 +71,7 @@ class UserListView(LoginMixin, ListView):
     def get_queryset(self):
         search = self.request.GET.get("search")
         order_by = self.request.GET.get("orderby")
-        filter_isenabled = self.request.GET.get("created_by")
+        filter_gender = self.request.GET.get("created_by")
 
         if order_by:
             all_user = Users.objects.all().order_by(order_by)
@@ -75,18 +79,16 @@ class UserListView(LoginMixin, ListView):
         else:
             all_user = Users.objects.all().order_by(self.order_field)
 
-        # if filter_isenabled:
-        #     self.created_by = filter_isenabled
-        #     all_user = Users.objects.filter(isenabled=self.created_by)
+        if filter_gender:
+            self.created_by = filter_gender
+            all_user = Users.objects.filter(gender=self.created_by)
 
-        # if search:
-        #     # 项目名称 、创建人、项目负责人、项目负责人姓名查询
-        #     all_user = all_user.filter(
-        #         Q(project_name__icontains=search) | Q(creator__icontains=search) | Q(
-        #             prjcet_personliable__project__project_name__icontains=search) | Q(
-        #             prjcet_personliable__username__icontains=search)
-        #     )
-        #     self.search_value = search
+        if search:
+            # 项目名称 、创建人、项目负责人、项目负责人姓名查询
+            all_user = all_user.filter(
+                Q(name__icontains=search) | Q(username__icontains=search) | Q(
+                    mobile__icontains=search))
+            self.search_value = search
 
         self.count_total = all_user.count()
         paginator = Paginator(all_user, self.pagenum)
@@ -104,8 +106,46 @@ class UserListView(LoginMixin, ListView):
         return context
 
 
-# Handle Errors
+class UserCreateView(LoginMixin, CreateView):
+    """
+    添加用户 视图
+    """
+    model = Users
+    form_class = UserCreateForm
+    template_name = "oauth/user_add.html"
 
+    def get_form_kwargs(self):
+        # Ensure the current `request` is provided to ProjectCreateForm.
+        kwargs = super(UserCreateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+
+class UserUpdateView(LoginMixin, UpdateView):
+    """
+    更新用户
+    """
+    model = Users
+    form_class = UserUpdateForm
+    template_name = "oauth/user_update.html"
+
+    # def get_form_kwargs(self):
+    #     # Ensure the current `request` is provided to ProjectCreateForm.
+    #     kwargs = super(UserUpdateView, self).get_form_kwargs()
+    #     kwargs.update({'request': self.request})
+    #     return kwargs
+
+
+class UserDeleteView(LoginMixin, DeleteView):
+    """
+    删除用户
+    """
+    template_name_suffix = '_user_delete'  # 删除模板默认 users（模型开头  /users_user_delete
+    model = Users
+    success_url = reverse_lazy('userlist')
+
+
+# Handle Errors
 def page_not_found(request, exception):
     context = {}
     response = render(request, "errors/404.html", context=context)

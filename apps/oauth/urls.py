@@ -6,7 +6,7 @@
 
 from django.urls import path
 
-from oauth.views import SignInView, SignOutView, SignUpView, HomeView, UserListView
+from oauth.views import *
 
 urlpatterns = [
     path('login/', SignInView.as_view(), name='login'),
@@ -14,4 +14,7 @@ urlpatterns = [
     path('logout/', SignOutView.as_view(), name='logout'),
     path('index/', HomeView.as_view(), name='index'),
     path('userlist/', UserListView.as_view(), name='userlist'),
+    path('user-add', UserCreateView.as_view(), name='user_add'),  # 新增用户
+    path('user-update/<int:pk>/', UserUpdateView.as_view(), name="user_update"),  # 更新用户
+    path('user-delete/<int:pk>/', UserDeleteView.as_view(), name="user_delete"),  # 删除用户
 ]

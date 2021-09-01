@@ -117,14 +117,14 @@
                                                                  alt="activity-user">
                                                         {% endif %}
                                                     <td>
-                                                        <h6 class="mb-1">{{ user.name }}</h6>
+                                                        <h6 class="mb-1">{{ user.name|default:user.username}}</h6>
                                                     </td>
                                                     <td>
-                                                        <h6 class="mb-1">{{ user.mobile }}</h6>
+                                                        <h6 class="mb-1">{{ user.mobile|default:''}}</h6>
                                                     </td>
                                                     <td><a href="#!"
-                                                           class="label theme-bg2 text-white f-12">{{ user.dep }}</a><a
-                                                            href="#!" class="label theme-bg text-white f-12">{{ user.post }}</a>
+                                                           class="label theme-bg2 text-white f-12">{{ user.dep|default:'暂无' }}</a><a
+                                                            href="#!" class="label theme-bg text-white f-12">{{ user.post|default:'暂无' }}</a>
                                                     </td>
                                                     <td>
                                                         <h6 class="text-muted"><i
