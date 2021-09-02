@@ -59,14 +59,14 @@ class SignUpForm(forms.ModelForm):
 
 class UserCreateForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label='密码')
-    email = forms.CharField(widget=forms.EmailInput, label='邮箱')
 
     class Meta:
         model = Users
         # exclude = ['last_login', 'date_joined', 'first_name','last_name','objects']
         # fields = '__all__'
         fields = (
-            'username', 'password', 'is_superuser', 'is_staff', 'email', 'name', 'gender', 'mobile', 'dep', 'post',)
+            'username', 'password', 'is_superuser', 'is_staff', 'email', 'name', 'gender', 'mobile', 'birthday', 'dep',
+            'post',)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -108,14 +108,52 @@ class UserCreateForm(forms.ModelForm):
             user.save()
         return user
 
+
 class UserUpdateForm(forms.ModelForm):
+
 
     class Meta:
         model = Users
-    # exclude = ['last_login', 'date_joined', 'first_name','last_name','objects']
-    # fields = '__all__'
+        # exclude = ['last_login', 'date_joined', 'first_name','last_name','objects']
+        # fields = '__all__'
         fields = (
-            'username', 'is_superuser', 'is_staff', 'email', 'name', 'gender', 'mobile', 'dep', 'post',)
+            'username', 'is_superuser', 'is_staff', 'email', 'name', 'gender', 'mobile', 'birthday', 'dep', 'post',)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+
+    def clean_mobile(self):
+        """
+        验证手机号码合法性
+        :return:
+        """
+        mobile = self.cleaned_data.get("mobile")
+        mobile_old = self.initial.get("mobile")
+        if mobile == mobile_old:  # 如果更新数据等于旧数据
+            return mobile
+        elif mobile != mobile_old:  # 如果当前数据不等于旧数需要验证合法性
+            is_exist = Users.objects.filter(mobile=mobile).count()
+            if is_exist >= 1:
+                raise forms.ValidationError("手机号码已经存在！！")
+        else:  # 号码不合法
+            raise forms.ValidationError("手机号码格式错误！！")
+        return mobile
+
+    def clean_email(self):
+        """
+        验证email合法性
+        :return:
+        """
+        email = self.cleaned_data.get("email")
+        email_old = self.initial.get("email")
+        if email == email_old:  # 如果更新数据等于旧数据
+            return email
+        else:
+            is_exist = Users.objects.filter(email=email).count()
+            if is_exist >= 1:
+                raise forms.ValidationError("邮箱已经存在！！")
+        return email
 
     def save(self, commit=True):
         """

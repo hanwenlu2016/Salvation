@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView
 from django.core.paginator import Paginator
@@ -129,11 +129,11 @@ class UserUpdateView(LoginMixin, UpdateView):
     form_class = UserUpdateForm
     template_name = "oauth/user_update.html"
 
-    # def get_form_kwargs(self):
-    #     # Ensure the current `request` is provided to ProjectCreateForm.
-    #     kwargs = super(UserUpdateView, self).get_form_kwargs()
-    #     kwargs.update({'request': self.request})
-    #     return kwargs
+    def get_form_kwargs(self):
+        # Ensure the current `request` is provided to ProjectCreateForm.
+        kwargs = super(UserUpdateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
 
 
 class UserDeleteView(LoginMixin, DeleteView):

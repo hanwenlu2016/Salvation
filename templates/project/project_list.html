@@ -93,6 +93,7 @@
                                                 <th>项目版本</th>
                                                 <th>项目负责人</th>
                                                 <th>参与人员</th>
+                                                <th>部署信息</th>
                                                 <th>创建时间</th>
                                                 <th>更新时间</th>
                                                 <th>维护人</th>
@@ -121,6 +122,9 @@
 
                                                     <td>
                                                         <a href="{% url 'project_particpant' p.pk %}">{{ p.prjcet_participant.count }}</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{% url 'project_dev' p.pk %}">{{ p.deployinfos }}</a>
                                                     </td>
 
                                                     <td>{{ p.createtime }}</td>

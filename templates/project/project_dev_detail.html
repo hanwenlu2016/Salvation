@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 {% load project_extras  static %}
-{% block title %}  参人员 {% endblock %}
+{% block title %}  部署信息 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -27,9 +27,10 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="m-b-10">
-                                        <span><i  class="feather icon-box">  <a href="{% url 'prlist' %}">项目列表</a></i></span>
+                                        <span><i class="feather icon-box">  <a
+                                                href="{% url 'prlist' %}">项目列表</a></i></span>
                                     </h5>
-                                        <span><i class="fa fa-map-marker"></i> {{ object.project_name }}  参与人员</span>
+                                    <span><i class="fa fa-map-marker"></i> {{ project_dev.project_name }}  部署信息</span>
                                 </div>
 
 
@@ -39,33 +40,19 @@
                                             <table class="table table-sm  ">
                                                 <thead class="thead-dark">
                                                 <tr>
-                                                    <th scope="col">性别</th>
-                                                    <th scope="col">姓名</th>
-                                                    <th scope="col">部门</th>
-                                                    <th scope="col">职位</th>
+                                                    <th>部署名称</th>
+                                                    <th>项目别名</th>
+                                                    <th>部署路径</th>
+                                                    <th>部署描述</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {% for project in project_particpant.prjcet_participant.all %}
-
-                                                    <tr>
-                                                        <td>
-                                                            {% if project.gender == 'female' %}
-                                                                <img class="rounded-circle" style="width:40px;"
-                                                                     src="{% static 'assets/images/user/avatar-1.jpg' %}"
-                                                                     alt="activity-user">
-                                                            {% else %}
-                                                                <img class="rounded-circle" style="width:40px;"
-                                                                     src="{% static 'assets/images/user/avatar-2.jpg' %}"
-                                                                     alt="activity-user">
-                                                            {% endif %}
-                                                        </td>
-                                                        <td>{{ project.name }}</td>
-                                                        <td>{{ project.dep }}</td>
-                                                        <td>{{ project.post }}</td>
-                                                    </tr>
-
-                                                {% endfor %}
+                                                <tr>
+                                                    <td>{{ project_dev.deployinfos.prjname }}</td>
+                                                    <td>{{ project_dev.deployinfos.prjalias }}</td>
+                                                    <td>{{ project_dev.deployinfos.deploypath }}</td>
+                                                    <td>{{ project_dev.deployinfos.depldescr }}</td>
+                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>

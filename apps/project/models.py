@@ -10,13 +10,16 @@ class DeployInfo(models.Model):
     """
     部署表
     """
-    prjname = models.CharField(max_length=100, unique=True, verbose_name='项目名称')
-    prjalias = models.CharField(max_length=32, null=True, blank=True, verbose_name='项目别名')
-    deploypath = models.CharField(max_length=200, null=True, blank=True, verbose_name='部署路径')
+    prjname = models.CharField(max_length=100, unique=True, verbose_name='部署名称')
+    prjalias = models.CharField(max_length=32,  verbose_name='项目别名')
+    deploypath = models.CharField(max_length=200,  verbose_name='部署路径')
     depldescr = models.TextField(null=True, blank=True, verbose_name='部署描述')
 
     def __str__(self):
         return self.prjname
+
+    def get_absolute_url(self):
+        return reverse('devlist')
 
     class Meta:
         verbose_name = '部署信息'

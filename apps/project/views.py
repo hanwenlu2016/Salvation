@@ -3,11 +3,11 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView,UpdateView,DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.core.paginator import Paginator
 from django.contrib.messages.views import messages
-from project.forms import ProjectCreateForm, ProjectUpdateForm
-from project.models import Project
+from project.forms import *
+from project.models import Project, DeployInfo
 from mixins.loginmixin import LoginMixin
 
 
@@ -73,6 +73,7 @@ class ProjectDetailView(LoginMixin, DetailView):
         context['project_info'] = project_info
         return context
 
+
 class ProjectParticpantDetailView(LoginMixin, DetailView):
     """
     项目的参加人员 详情
@@ -85,6 +86,20 @@ class ProjectParticpantDetailView(LoginMixin, DetailView):
         context = super(ProjectParticpantDetailView, self).get_context_data(**kwargs)
         related_member = Project.objects.get(id=self.get_object().id)
         context['project_particpant'] = related_member
+        return context
+
+class ProjectDevDetailView(LoginMixin, DetailView):
+    """
+    项目部署信息 详情
+    """
+    model = Project
+    context_object_name = 'project_dev'
+    template_name = "project/project_dev_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDevDetailView, self).get_context_data(**kwargs)
+        dev = Project.objects.get(id=self.get_object().id)
+        context['project_dev'] = dev
         return context
 
 class ProjectCreateView(LoginMixin, CreateView):
@@ -100,6 +115,7 @@ class ProjectCreateView(LoginMixin, CreateView):
         kwargs = super(ProjectCreateView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs
+
 
 class ProjectUpdateView(LoginMixin, UpdateView):
     """
@@ -124,6 +140,88 @@ class ProjectDeleteView(LoginMixin, DeleteView):
     success_url = reverse_lazy('prlist')
 
 
+class DevListView(LoginMixin, ListView):
+    """
+    项目部署信息列表 视图
+    """
+    model = DeployInfo
+    context_object_name = 'project_dev'
+    template_name = "project/project_dev_list.html"
+    search_value = ""
+    order_field = "-prjalias"
+    created_by = ''
+    pagenum = 5  # 每页分页数据条数
+
+    def get_queryset(self):
+        search = self.request.GET.get("search")
+        order_by = self.request.GET.get("orderby")
+        filter_isenabled = self.request.GET.get("created_by")
+
+        if order_by:
+            dev_pro = DeployInfo.objects.all().order_by(order_by)
+            self.order_field = order_by
+        else:
+            dev_pro = DeployInfo.objects.all().order_by(self.order_field)
+
+        if filter_isenabled:
+            self.created_by = filter_isenabled
+            dev_pro = DeployInfo.objects.filter(isenabled=self.created_by)
+
+        if search:
+            # 项目名称 、创建人、项目负责人、项目负责人姓名查询
+            dev_pro = dev_pro.filter(
+                Q(prjname__icontains=search) | Q(prjalias__icontains=search))
+            self.search_value = search
+
+        self.count_total = dev_pro.count()
+        paginator = Paginator(dev_pro, self.pagenum)
+        page = self.request.GET.get('page')
+        project_dev = paginator.get_page(page)
+        return project_dev
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DevListView, self).get_context_data(*args, **kwargs)
+        context['count_total'] = self.count_total
+        context['search'] = self.search_value
+        context['orderby'] = self.order_field
+        context['objects'] = self.get_queryset()
+        context['created_by'] = self.created_by
+        return context
 
 
+class DevCreateView(LoginMixin, CreateView):
+    """
+    添加环境 视图
+    """
+    model = DeployInfo
+    form_class = DevCreateForm
+    template_name = "project/project_dev_add.html"
 
+    def get_form_kwargs(self):
+        # Ensure the current `request` is provided to ProjectCreateForm.
+        kwargs = super(DevCreateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+class DevUpdateView(LoginMixin, UpdateView):
+    """
+    更新项目
+    """
+    model = DeployInfo
+    form_class = DevUpdateForm
+    template_name = "project/project_dev_update.html"
+
+    def get_form_kwargs(self):
+        # Ensure the current `request` is provided to ProjectCreateForm.
+        kwargs = super(DevUpdateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+
+class DevDeleteView(LoginMixin, DeleteView):
+    """
+    删除项目
+    """
+    template_name_suffix='_delete'
+    model = DeployInfo
+    success_url = reverse_lazy('devlist')

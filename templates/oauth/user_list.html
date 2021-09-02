@@ -44,6 +44,10 @@
                                                     <a href="{% url 'user_add' %}" class='btn btn-primary'>新增用户</a>
                                                 </div>
 
+{#                                                <div class="btn-group ">#}
+{#                                                    <a onclick="getValues()" href="" class="btn btn-danger input-sm">批量删除</a>#}
+{#                                                </div>#}
+
                                                 <div class="btn-group ">
                                                     {% if created_by == '' %}
                                                         <button class="btn btn-light dropdown-toggle" type="button"
@@ -63,9 +67,7 @@
                                                            href="{% url 'userlist' %}?created_by=female&search={{ search }}">女</a>
                                                     </div>
                                                 </div>
-
                                             </div>
-
 
                                         </div>
 
@@ -88,6 +90,7 @@
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
+
                                                 <th>id</th>
                                                 <th>用户名</th>
                                                 <th>姓名</th>
@@ -105,19 +108,19 @@
 
                                             {% for u in users %}
                                                 <tr>
-                                                    <th scope="row">{{ u.id }}</th>
-{#                                                    <td><a href="{% url 'userlist' u.pk %}">{{ u.username }}</a></td>#}
+
+                                                    {#                                                    <td><a href="{% url 'userlist' u.pk %}">{{ u.username }}</a></td>#}
                                                     <td>{{ u.username }}</td>
-                                                    <td>{{ u.name|default:u.username  }}</td>
+                                                    <td>{{ u.name|default:u.username }}</td>
                                                     {% if u.gender == 'male' %}
                                                         <td>男</td>
-                                                        {% else %}
+                                                    {% else %}
                                                         <td>女</td>
                                                     {% endif %}
                                                     <td>{{ u.dep|default:'' }}</td>
                                                     <td>{{ u.post|default:'' }}</td>
                                                     <td>{{ u.birthday|default:'' }}</td>
-                                                    <td>{{ u.mobile|default:''}}</td>
+                                                    <td>{{ u.mobile|default:'' }}</td>
                                                     <td>{{ u.email|default:'' }}</td>
                                                     <td>{{ u.is_superuser|default:"否" }}</td>
                                                     <td>
@@ -160,4 +163,5 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+
 {% endblock javascripts %}
