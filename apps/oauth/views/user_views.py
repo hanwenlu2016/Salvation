@@ -1,58 +1,17 @@
-from django.contrib.auth.views import LoginView, LogoutView
+# -*- coding: utf-8 -*-
+# @File: user_views.py
+# @Author: HanWenLu
+# @E-mail: wenlupay@163.com
+# @Time: 2021/9/2  17:00
+
 from django.db.models import Q
-from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import  CreateView, ListView, UpdateView, DeleteView
 from django.core.paginator import Paginator
 
 from mixins.loginmixin import LoginMixin
-from .models import Users, Position
-from oauth.forms import SignUpForm, UserCreateForm, UserUpdateForm
-
-
-class HomeView(LoginMixin, TemplateView):
-    template_name = "index.html"
-    context = {}
-
-    def get(self, request, *args, **kwargs):
-        data_count = {
-            "userlist": Users.objects.all().order_by('-last_login')[:5],  # 只取登录时间的默认5
-            "member": Users.objects.all().count(),
-        }
-        self.context['data_count'] = data_count
-        return render(request, self.template_name, self.context)
-
-
-class SignInView(LoginView):
-    """
-    登录视图
-    """
-    template_name = 'accounts/login.html'
-
-
-class SignOutView(LogoutView):
-    """
-    登出视图
-    """
-    template_name = 'accounts/login.html'
-
-
-class SignUpView(CreateView):
-    """
-    注册视图
-    """
-
-    template_name = 'accounts/register.html'
-    form_class = SignUpForm
-    success_url = reverse_lazy('login')
-
-    def form_invalid(self, form):
-        """
-        验证失败时触发
-        :param form:
-        :return:
-        """
-        return self.render_to_response({'form': form, })
+from oauth.forms import UserCreateForm, UserUpdateForm
+from oauth.models import Users
 
 
 class UserListView(LoginMixin, ListView):
@@ -62,7 +21,7 @@ class UserListView(LoginMixin, ListView):
 
     model = Users
     context_object_name = 'users'
-    template_name = "oauth/user_list.html"
+    template_name = "oauth/user/user_list.html"
     search_value = ""
     order_field = "-id"
     created_by = ''
@@ -112,7 +71,7 @@ class UserCreateView(LoginMixin, CreateView):
     """
     model = Users
     form_class = UserCreateForm
-    template_name = "oauth/user_add.html"
+    template_name = "oauth/user/user_add.html"
 
     def get_form_kwargs(self):
         # Ensure the current `request` is provided to ProjectCreateForm.
@@ -127,7 +86,7 @@ class UserUpdateView(LoginMixin, UpdateView):
     """
     model = Users
     form_class = UserUpdateForm
-    template_name = "oauth/user_update.html"
+    template_name = "oauth/user/user_update.html"
 
     def get_form_kwargs(self):
         # Ensure the current `request` is provided to ProjectCreateForm.
@@ -140,35 +99,10 @@ class UserDeleteView(LoginMixin, DeleteView):
     """
     删除用户
     """
-    template_name_suffix = '_user_delete'  # 删除模板默认 users（模型开头  /users_user_delete
+    #template_name_suffix = '_user_delete'  # 删除模板默认 users（模型开头  /users_user_delete
+
+    template_name = "oauth/user/user_delete.html"
     model = Users
     success_url = reverse_lazy('userlist')
 
 
-# Handle Errors
-def page_not_found(request, exception):
-    context = {}
-    response = render(request, "errors/404.html", context=context)
-    response.status_code = 404
-    return response
-
-
-def server_error(request, exception=None):
-    context = {}
-    response = render(request, "errors/500.html", context=context)
-    response.status_code = 500
-    return response
-
-
-def permission_denied(request, exception=None):
-    context = {}
-    response = render(request, "errors/403.html", context=context)
-    response.status_code = 403
-    return response
-
-
-def bad_request(request, exception=None):
-    context = {}
-    response = render(request, "errors/400.html", context=context)
-    response.status_code = 400
-    return response

@@ -53,7 +53,7 @@ class Project(models.Model):
             self.createtime = datetime.datetime.now()
             self.updatetime = datetime.datetime.now()
 
-        super().save(*args, **kwargs)
+        super(Project,self).save(*args, **kwargs)
 
     def __str__(self):
         return self.project_name
@@ -66,3 +66,31 @@ class Project(models.Model):
         verbose_name_plural = verbose_name
 
 
+class Module(models.Model):
+    """
+    功能模块表
+    """
+    projcet = models.ForeignKey(Project, null=True, blank=True,verbose_name='所属项目', on_delete=models.SET_NULL)
+    module_name = models.CharField(max_length=32, verbose_name='模块名称')
+    module_alias = models.CharField(max_length=32, verbose_name='模块别名')  # 此别名对应Case表中的modelname
+    isenabled = models.BooleanField(default=True, verbose_name='状态')
+    createtime = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    updatetime = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    maintainer = models.CharField(max_length=32, verbose_name='维护者')
+
+    def __str__(self):
+        return self.module_name
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.createtime = datetime.datetime.now()
+            self.updatetime = datetime.datetime.now()
+
+        super(Module,self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('modulelist')
+
+    class Meta:
+        verbose_name = '功能模块'
+        verbose_name_plural = verbose_name

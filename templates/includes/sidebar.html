@@ -19,14 +19,24 @@
                             class="feather icon-home"></i></span><span class="pcoded-mtext">首页</span></a>
                 </li>
 
+
                 <li class="nav-item ">
                     <a href="{% url 'userlist' %}" class="nav-link ">
-                        <span class="pcoded-micon"><i
-                                class="fa fa-users" ></i>
-                    </span>
-                        <span class="pcoded-mtext" >用户管理</span></a>
+                            <span class="pcoded-micon"><i
+                                    class="fa fa-users"></i>
+                        </span>
+                        <span class="pcoded-mtext">用户管理</span></a>
                 </li>
 
+                {% if user.is_superuser %}  <!-- 管理员权限 -->
+                    <li class="nav-item ">
+                        <a href="/admin/" class="nav-link ">
+                        <span class="pcoded-micon"><i
+                                class="fas fa-shield-alt"></i>
+                    </span>
+                            <span class="pcoded-mtext">后台管理</span></a>
+                    </li>
+                {% endif %}
                 <!-- 项目管理 -->
 
                 <li class="nav-item pcoded-hasmenu ">
@@ -34,7 +44,7 @@
                             class="pcoded-mtext">项目管理</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="{% url 'devlist' %}" class="">部署环境</a></li>
-                        <li class=""><a href="" class="">模块信息</a></li>
+                        <li class=""><a href="{% url 'modulelist' %}" class="">模块信息</a></li>
                         <li class=""><a href="{% url 'prlist' %}" class="">项目信息</a></li>
 
                     </ul>
@@ -51,7 +61,8 @@
                 </li>
 
                 <li class="nav-item pcoded-hasmenu ">
-                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i  class="fa fa-tasks"></i></span><span
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
+                            class="fa fa-tasks"></i></span><span
                             class="pcoded-mtext">任务管理</span></a>
                     <ul class="pcoded-submenu">
                         <li class=""><a href="" class="">任务详情</a></li>

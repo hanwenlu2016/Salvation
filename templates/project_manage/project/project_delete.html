@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+
+{% load  static crispy_forms_tags %}
+{% block title %} 删除项目 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    {% block fromdel %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-b-10"><span><i class="feather icon-box">  <a href="{% url 'prlist' %}">项目列表</a></i></span>
+                </h5>
+                <span><i class="fa fa-map-marker"></i> 删除项目</span>
+            </div>
+            <div class="card-block table-border-style">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="alert alert-danger" role="alert">
+                        <p>您确定要删除?【{{ object }}】</p>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="确定">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            onclick="window.location.href='{% url 'prlist' %}';">取消
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    {% endblock fromdel %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

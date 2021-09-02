@@ -1,0 +1,35 @@
+{% extends "layouts/base.html" %}
+
+{% load  static crispy_forms_tags %}
+{% block title %} 增加用户 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    {% block fromadd %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-b-10">
+                                        <span><i class="fa fa-users">  <a
+                                                href="{% url 'userlist' %}">用户管理</a></i></span>
+                </h5>
+                <span><i class="fa fa-map-marker"></i> 新增用户</span>
+            </div>
+            <div class="card-block table-border-style">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'userlist' %}';" >取消</button>
+                </form>
+            </div>
+        </div>
+    {% endblock fromadd %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

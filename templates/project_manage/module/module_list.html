@@ -1,7 +1,6 @@
 {% extends "layouts/base.html" %}
-{% load project_extras %}
-{% load  static %}
-{% block title %} 用户列表 {% endblock %}
+{% load project_extras static %}
+{% block title %} 模块列表 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -32,7 +31,7 @@
                                     <h5><span><i class="feather icon-home">  <a
                                             href="{% url 'index' %}">首页</a></i></span>
                                     </h5>
-                                    <span><i class="fa fa-map-marker"></i> 用户列表</span>
+                                    <span><i class="fa fa-map-marker"></i> 模块列表</span>
                                 </div>
 
                                 <div class="card-block">
@@ -41,18 +40,14 @@
 
                                             <div class="col-6">
                                                 <div class="btn-group ">
-                                                    <a href="{% url 'user_add' %}" class='btn btn-primary'>新增用户</a>
+                                                    <a href="{% url 'module_add' %}" class='btn btn-primary'>新增模块</a>
                                                 </div>
-
-{#                                                <div class="btn-group ">#}
-{#                                                    <a onclick="getValues()" href="" class="btn btn-danger input-sm">批量删除</a>#}
-{#                                                </div>#}
 
                                                 <div class="btn-group ">
                                                     {% if created_by == '' %}
                                                         <button class="btn btn-light dropdown-toggle" type="button"
                                                                 data-toggle="dropdown" aria-haspopup="true"
-                                                                aria-expanded="false">性别
+                                                                aria-expanded="false">模块状态
                                                         </button>
                                                     {% else %}
                                                         <button class="btn btn-light dropdown-toggle" type="button"
@@ -62,12 +57,14 @@
                                                     <div class="dropdown-menu">
 
                                                         <a class="dropdown-item"
-                                                           href="{% url 'userlist' %}?created_by=male&search={{ search }}">男</a>
+                                                           href="{% url 'prlist' %}?created_by={{ True }}&search={{ search }}">正常</a>
                                                         <a class="dropdown-item"
-                                                           href="{% url 'userlist' %}?created_by=female&search={{ search }}">女</a>
+                                                           href="{% url 'prlist' %}?created_by={{ False }}&search={{ search }}">结项</a>
                                                     </div>
                                                 </div>
+
                                             </div>
+
 
                                         </div>
 
@@ -78,7 +75,7 @@
                                                            class="form-control"
                                                            name="search" ,
                                                            id='search' ,
-                                                           placeholder="用户名/姓名/手机号" ,
+                                                           placeholder="项目名称/模块名称/模块别名" ,
                                                            value=>
                                                 </div>
                                                 <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
@@ -90,47 +87,37 @@
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
-
                                                 <th>id</th>
-                                                <th>用户名</th>
-                                                <th>姓名</th>
-                                                <th>性别</th>
-                                                <th>部门</th>
-                                                <th>职位</th>
-                                                <th>出生年月</th>
-                                                <th>手机号</th>
-                                                <th>邮箱</th>
-                                                <th>是否管理员</th>
+                                                <th>所属项目</th>
+                                                <th>模块名称</th>
+                                                <th>模块别名</th>
+                                                <th>状态</th>
+                                                <th>创建时间</th>
+                                                <th>更新时间</th>
+                                                <th>维护者</th>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
 
-                                            {% for u in users %}
+                                            {% for module in project_module %}
                                                 <tr>
-
-                                                    {#                                                    <td><a href="{% url 'userlist' u.pk %}">{{ u.username }}</a></td>#}
-                                                    <td>{{ u.username }}</td>
-                                                    <td>{{ u.name|default:u.username }}</td>
-                                                    {% if u.gender == 'male' %}
-                                                        <td>男</td>
-                                                    {% else %}
-                                                        <td>女</td>
-                                                    {% endif %}
-                                                    <td>{{ u.dep|default:'' }}</td>
-                                                    <td>{{ u.post|default:'' }}</td>
-                                                    <td>{{ u.birthday|default:'' }}</td>
-                                                    <td>{{ u.mobile|default:'' }}</td>
-                                                    <td>{{ u.email|default:'' }}</td>
-                                                    <td>{{ u.is_superuser|default:"否" }}</td>
+                                                    <td>{{ module.id }}</td>
+                                                    <td>{{ module.projcet }}</td>
+                                                    <td>{{ module.module_name }}</td>
+                                                    <td>{{ module.module_alias }}</td>
+                                                    <td>{{ module.isenabled }}</td>
+                                                    <td>{{ module.createtime }}</td>
+                                                    <td>{{ module.updatetime }}</td>
+                                                    <td>{{ module.maintainer }}</td>
                                                     <td>
                                                         <button type="button" class="btn btn-success"
-                                                                onclick="window.location.href='{% url 'user_update' u.id %}';">
+                                                                onclick="window.location.href='{% url 'module_update' module.id %}';">
                                                             <i class="feather icon-edit"></i>更新
                                                         </button>
 
                                                         <button href="#" type="button" class="btn btn-danger"
-                                                                onclick="window.location.href='{% url 'user_delete' u.id %}';">
+                                                                onclick="window.location.href='{% url 'module_delete' module.id %}';">
                                                             <i class=" feather icon-trash-2"></i>删除
                                                         </button>
                                                     </td>
@@ -163,5 +150,4 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-
 {% endblock javascripts %}
