@@ -6,7 +6,7 @@
 
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from mixins.loginmixin import LoginMixin
+from util.loginmixin import LoginMixin
 
 from oauth.models import Users
 

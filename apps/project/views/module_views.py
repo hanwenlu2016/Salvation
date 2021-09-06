@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 from project.forms.module_from import ModuleCreateForm,ModuleUpdateForm
 from project.models import Module
 
-from mixins.loginmixin import LoginMixin
+from util.loginmixin import LoginMixin
 
 class ModuleListView(LoginMixin, ListView):
     """

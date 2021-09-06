@@ -12,7 +12,7 @@ from oauth.views.user_views import *
 
 
 urlpatterns = [
-    path('login/', SignInView.as_view(), name='login'),
+    path('', SignInView.as_view(), name='login'),
     path('register/', SignUpView.as_view(), name='register'),
     path('logout/', SignOutView.as_view(), name='logout'),
     path('index/', IndexView.as_view(), name='index'),

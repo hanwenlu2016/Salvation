@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 from project.forms.project_from import ProjectUpdateForm, ProjectCreateForm
 from project.models import Project
 
-from mixins.loginmixin import LoginMixin
+from util.loginmixin import LoginMixin
 
 
 class ProjectListView(LoginMixin, ListView):

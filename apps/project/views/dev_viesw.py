@@ -8,12 +8,12 @@
 
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.core.paginator import Paginator
 from project.forms.dev_from import DevCreateForm,DevUpdateForm
 from project.models import DeployInfo
 
-from mixins.loginmixin import LoginMixin
+from util.loginmixin import LoginMixin
 
 
 class DevListView(LoginMixin, ListView):
