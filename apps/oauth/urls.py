@@ -9,7 +9,7 @@ from django.urls import path
 from oauth.views.index_views import *
 from oauth.views.signin_views import *
 from oauth.views.user_views import *
-from oauth.views.dep_views import *
+
 
 urlpatterns = [
     path('login/', SignInView.as_view(), name='login'),

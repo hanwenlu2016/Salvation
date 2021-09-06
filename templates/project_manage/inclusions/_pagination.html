@@ -1,34 +1,56 @@
-
 <ul class="pagination m-auto">
 
     {% if page_objects.has_previous %}
-        <li class="page-item "><a href="?page=1&orderby={{ orderby }}&search={{ search }}"><span class="page-link"><i class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</span></a></li>
+        <li class="page-item "><a href="?page=1&orderby={{ orderby }}&search={{ search }}">
+            <span class="page-link">&nbsp;首页</span></a></li>
+
+        <li class="page-item "><a
+                href="?page={{ page_objects.previous_page_number }}&orderby={{ orderby }}&search={{ search }}"><span
+                class="page-link"><i
+                class="fa fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</span></a></li>
     {% else %}
-        <li class="page-item disabled"><a ><span class="page-link">上一页</span></a></li>
+
+        <li class="page-item disabled"><a><span class="page-link">首页</span></a></li>
+        <li class="page-item disabled"><a><span class="page-link">上一页&nbsp;<i
+                class="fa fa-chevron-left" aria-hidden="true"></i></span></a></li>
     {% endif %}
-    
-        
+
     {% if page_objects.number|add:'-4' > 1 %}
-        <li class ="page-item"><a class="page-link" href="?page={{ page_objects.number|add:'-5' }}&orderby={{ orderby }}&search={{ search }}">&hellip;</a></li>
+        <li class="page-item"><a class="page-link"
+                                 href="?page={{ page_objects.number|add:'-5' }}&orderby={{ orderby }}&search={{ search }}">&hellip;</a>
+        </li>
     {% endif %}
-        
+
     {% for i in page_objects.paginator.page_range %}
         {% if page_objects.number == i %}
-                <li class="page-item active"><a class="page-link" href=""> {{i}}</a></li>
+            <li class="page-item active"><a class="page-link" href=""> {{ i }}</a></li>
         {% elif i > page_objects.number|add:'-5' and i < page_objects.number|add:'5' %}
-            <li class ="page-item" ><a class="page-link" href="?page={{ i }}&orderby={{ orderby }}&search={{ search }}">{{ i }}</a></li>
+            <li class="page-item"><a class="page-link"
+                                     href="?page={{ i }}&orderby={{ orderby }}&search={{ search }}">{{ i }}</a></li>
         {% endif %}
     {% endfor %}
-        
+
+
     {% if page_objects.paginator.num_pages > page_objects.number|add:'4' %}
-        <li class ="page-item"><a class="page-link" href="?page={{ page_objects.number|add:'5' }}&orderby={{ orderby }}&search={{ search }}">&hellip;</a></li>
+        <li class="page-item"><a class="page-link"
+                                 href="?page={{ page_objects.number|add:'5' }}&orderby={{ orderby }}&search={{ search }}">&hellip;</a>
+        </li>
     {% endif %}
 
     {% if page_objects.has_next %}
 
-        <li class ="page-item" ><a class="page-link" href="?page={{ page_objects.paginator.num_pages }}&orderby={{ order }}&search={{ search }}">下一页&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+        <li class="page-item"><a class="page-link"
+                                 href="?page={{ page_objects.next_page_number }}&orderby={{ order }}&search={{ search }}">下一页&nbsp;<i
+                class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+
+        <li class="page-item"><a class="page-link"
+                                 href="?page={{ page_objects.paginator.num_pages }}&orderby={{ order }}&search={{ search }}">尾页&nbsp;</a>
+        </li>
+
     {% else %}
-        <li class="page-item disabled"><a ><span class="page-link" >下一页</span></a></li>
+        <li class="page-item disabled"><a><span class="page-link">下一页&nbsp;<i
+                class="fa fa-chevron-right" aria-hidden="true"></i></span></a></li>
+        <li class="page-item disabled"><a><span class="page-link">尾页</span></a></li>
     {% endif %}
-        
+
 </ul>
