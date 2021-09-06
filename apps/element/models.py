@@ -80,8 +80,8 @@ class CaseSte(models.Model):
 
     caseid = models.ForeignKey(Case, related_name='case_ste', on_delete=models.CASCADE, verbose_name='关联用列')
     casesteid = models.IntegerField(verbose_name='步骤顺序')
-    Locat_type = models.ForeignKey(LocationType, on_delete=models.SET_NULL, verbose_name='定位类型')
-    operate = models.ForeignKey(OperateType, on_delete=models.SET_NULL, verbose_name='执行类型')
+    locat_type = models.ForeignKey(LocationType, on_delete=models.SET_NULL,blank=True, null=True, verbose_name='定位类型')
+    ope_type = models.ForeignKey(OperateType, on_delete=models.SET_NULL,blank=True, null=True, verbose_name='执行类型')
     locate = models.CharField(max_length=200, verbose_name='定位器')
     info = models.CharField(max_length=200, blank=True, null=True, verbose_name='步骤说明')
     expect = models.CharField(max_length=200, blank=True, null=True, verbose_name='预期结果')

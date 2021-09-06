@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # add app path
 
-sys.path.insert(0, os.path.join(BASE_DIR, "apps") )
+sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'project',
     'bootstrap4',
     'crispy_forms',
+    'element'
 ]
 
 MIDDLEWARE = [
@@ -126,7 +127,6 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
 
 
 STATIC_URL = '/static/'

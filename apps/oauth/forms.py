@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import forms
 from .models import Users
-from utli.rephone import is_phone
+from util.rephone import is_phone
 
 
 class SignUpForm(forms.ModelForm):
