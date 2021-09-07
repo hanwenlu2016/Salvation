@@ -41,11 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'oauth',
-    'project',
     'bootstrap4',
     'crispy_forms',
-    'element'
+    'rest_framework',
+    'corsheaders',
+    'django_filters',
+    'oauth',
+    'project',
+    'element',
+
 ]
 
 MIDDLEWARE = [

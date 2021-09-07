@@ -7,7 +7,7 @@
 from django.urls import path
 
 from project.views.project_views import *
-from project.views.dev_viesw import *
+from project.views.dev_views import *
 from project.views.module_views import *
 
 urlpatterns = [
