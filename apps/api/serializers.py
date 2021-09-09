@@ -8,7 +8,29 @@
 from rest_framework import serializers
 
 from element.models import Case, LocationType, OperateType, CaseSte
-from project.models import Module
+from project.models import Module,Project
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    """
+    项目序列化类
+    """
+
+    class Meta:
+        model = Project
+
+        fields =('id','project_name','isenabled','version')
+
+
+class ModuleSerializer(serializers.ModelSerializer):
+    """
+    模块序列化类 list
+    """
+    updatetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
+
+    class Meta:
+        model = Module
+        fields = ("id", "projcet", "module_name","module_alias",  "isenabled", "updatetime", "maintainer",)
 
 
 class LocationTypeSerializer(serializers.ModelSerializer):
@@ -116,3 +138,5 @@ class CaseSerializer(serializers.ModelSerializer):
             ste.expect = case_data.get('expect', ste.expect)
             ste.save()
         return instance
+
+
