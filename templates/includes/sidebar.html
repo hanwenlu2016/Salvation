@@ -28,15 +28,7 @@
                         <span class="pcoded-mtext">用户管理</span></a>
                 </li>
 
-                {% if user.is_superuser %}  <!-- 管理员权限 -->
-                    <li class="nav-item ">
-                        <a href="/admin/" class="nav-link ">
-                        <span class="pcoded-micon"><i
-                                class="fas fa-shield-alt"></i>
-                    </span>
-                            <span class="pcoded-mtext">后台管理</span></a>
-                    </li>
-                {% endif %}
+
                 <!-- 项目管理 -->
 
                 <li class="nav-item pcoded-hasmenu ">
@@ -56,7 +48,7 @@
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="fa fa-bars"></i></span><span
                             class="pcoded-mtext">用例管理</span></a>
                     <ul class="pcoded-submenu">
-                        <li class=""><a href="" class="">用例详情</a></li>
+                        <li class=""><a href="{% url 'eln' %}" class="">用例详情</a></li>
                     </ul>
                 </li>
 
@@ -65,10 +57,18 @@
                             class="fa fa-tasks"></i></span><span
                             class="pcoded-mtext">任务管理</span></a>
                     <ul class="pcoded-submenu">
-                        <li class=""><a href="" class="">任务详情</a></li>
+                        <li class=""><a href="{% url 'checklist' %}" class="">任务详情</a></li>
                     </ul>
                 </li>
 
+                <li class="nav-item pcoded-hasmenu ">
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i
+                            class="fa fa-tasks"></i></span><span
+                            class="pcoded-mtext">工具合集</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class=""><a href="{% url 'checklist' %}" class="">dependency-check</a></li>
+                    </ul>
+                </li>
 
                 <li class="nav-item ">
                     <a href="" class="nav-link ">
@@ -77,6 +77,15 @@
                         </span><span class="pcoded-mtext">记录操作 </span></a>
                 </li>
 
+                {% if user.is_superuser %}  <!-- 管理员权限 -->
+                    <li class="nav-item ">
+                        <a href="/admin/" class="nav-link ">
+                        <span class="pcoded-micon"><i
+                                class="fas fa-shield-alt"></i>
+                    </span>
+                            <span class="pcoded-mtext">后台管理</span></a>
+                    </li>
+                {% endif %}
 
                 <li data-username="Disabled Menu" class="nav-item">
                     <a href="" class="nav-link">

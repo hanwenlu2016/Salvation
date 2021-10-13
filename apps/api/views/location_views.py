@@ -18,7 +18,7 @@ class LocationTypeViewSet(viewsets.ModelViewSet):
     定位类型接口
     """
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     queryset = LocationType.objects.all()
     serializer_class = LocationTypeSerializer

@@ -8,6 +8,7 @@
 
 from django import forms
 from ..models import Project
+from oauth.models import Users
 
 
 class ProjectCreateForm(forms.ModelForm):
@@ -20,21 +21,22 @@ class ProjectCreateForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(ProjectCreateForm, self).__init__(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        obj = super(ProjectCreateForm, self).save(commit=False)
-        if self.request:
-            print(self.request)
-            obj.creator = self.request.user
-            obj.updater = self.request.user
-            obj.save()
-        return obj
+    def save(self, commit=True):
+        instance = forms.ModelForm.save(self, False)
+        if commit:
+            instance.creator = self.request.user
+            instance.updater = self.request.user
+            instance.save()
+            self.save_m2m()  # 多对多时 需要调用 save_m2m 方法
+        return instance
 
 
 class ProjectUpdateForm(ProjectCreateForm):
-
-    def save(self, *args, **kwargs):
-        obj = super(ProjectCreateForm, self).save(commit=False) #重写父类方法
+    # 重写父类方法
+    def save(self, commit=True):
+        obj = super(ProjectCreateForm, self).save(commit=False)
         if self.request:
             obj.updater = self.request.user.username
             obj.save()
+            self.save_m2m()
         return obj

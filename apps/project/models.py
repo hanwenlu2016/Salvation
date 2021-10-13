@@ -36,6 +36,7 @@ class Project(models.Model):
     descr = models.TextField(null=True, blank=True, verbose_name='项目描述')
     version = models.CharField(max_length=32, null=True, blank=True, editable=True, verbose_name='版本版本')
     deployinfos = models.ForeignKey(DeployInfo, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='部署信息')
+
     prjcet_personliable = models.ForeignKey(Users, null=True, blank=True, on_delete=models.SET_NULL,related_name='user_prjcet',
                                            verbose_name='所属负责人', )
 

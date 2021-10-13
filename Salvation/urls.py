@@ -18,14 +18,17 @@ from django.urls import path, include
 from rest_framework.authtoken import views
 
 from api.urls import router
+from element.views.element_wiews import ElementListView
 
 urlpatterns = [
     path('admin/', admin.site.urls, ),
-    path('api-token-auth/', views.obtain_auth_token,name='auth-token'),
+    path('api-token-auth/', views.obtain_auth_token, name='auth-token'),
     path('api-auth/', include('rest_framework.urls')),
     path('', include('oauth.urls')),
     path('api/', include(router.urls)),
     path('project/', include('project.urls')),
+    path('check/', include('tool.urls')),
+    path('eln/', ElementListView.as_view(), name='eln'),
 ]
 
 handler400 = 'oauth.views.error_views.bad_request'

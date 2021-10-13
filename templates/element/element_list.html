@@ -1,0 +1,274 @@
+{% extends "layouts/base.html" %}
+{% load project_extras static %}
+{% block title %} 用列列表 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+    {#        toastr弹框在线CDN#}
+    <script src="https://cdn.bootcss.com/toastr.js/2.1.4/toastr.min.js"></script>
+
+    <!--日历图标样式-->
+            <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    {#        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment-with-locales.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ basic-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><span><i class="feather icon-home">  <a
+                                            href="">首页</a></i></span>
+                                    </h5>
+                                    <span><i class="fa fa-map-marker"></i> 项目列表</span>
+                                </div>
+
+
+                                <div class="card-block">
+                                    <div class='row'>
+                                        <div class="col-8">
+
+                                            <div class="col-6">
+                                                <div class="btn-group ">
+                                                    <a href="" class='btn btn-primary'>新增项目</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <form class="form-inline mb-2">
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="search" ,
+                                                           id='search' ,
+                                                           placeholder="项目名称/负责人/创建人" ,
+                                                           value=>
+                                                </div>
+                                                <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    {#                                    <div class="table-responsive ">#}
+                                    {#                                        <table class="table table-striped">#}
+                                    {#                                            <thead>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <th>id</th>#}
+                                    {##}
+                                    {#                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>#}
+                                    {#                                            </tr>#}
+                                    {#                                            </thead>#}
+                                    {#                                            <tbody>#}
+                                    {#                                            <tr>#}
+                                    {#                                                <td>#}
+                                    {#                                                    <button id="send">发送</button>#}
+                                    {#                                                </td>#}
+                                    {##}
+                                    {##}
+                                    {#                                                <td>#}
+                                    {#                                                    <button type="button" class="btn btn-success"#}
+                                    {#                                                            onclick="window.location.href='';">#}
+                                    {#                                                        <i class="feather icon-edit"></i>更新#}
+                                    {#                                                    </button>#}
+                                    {##}
+                                    {#                                                    <button href="#" type="button" class="btn btn-danger"#}
+                                    {#                                                            onclick="window.location.href='';">#}
+                                    {#                                                        <i class=" feather icon-trash-2"></i>删除#}
+                                    {#                                                    </button>#}
+                                    {#                                                </td>#}
+                                    {#                                            </tr>#}
+                                    {#                                            </tbody>#}
+                                    {#                                        </table>#}
+                                    {#                                    </div>#}
+                                    <!-- 按钮触发模态框 -->
+                                    <div class="columns columns-right btn-group pull-right">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#myModal">新增记录
+                                        </button>
+                                    </div>
+                                    <form id="add-smoke-form" action="#" method="post" class="form-horizontal"
+                                          role="form">
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-hidden="true">
+                                                            &times;
+                                                        </button>
+                                                        <h4 class="modal-title" id="myModalLabel">
+                                                            新增记录
+                                                        </h4>
+                                                    </div>
+                                                    {# 模态框body #}
+                                                    <div class="modal-body" style="height: 100%;">
+
+
+                                                        <div class="form-group">
+                                                            <label for="lastname"
+                                                                   class="col-sm-3 control-label">版本号</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control" name="version"
+                                                                       id="version" required="required"
+                                                                       placeholder="请输入当前版本号">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="firstname"
+                                                                   class="col-sm-3 control-label">转测时间</label>
+                                                            <div class='input-group col-sm-7 date' id='datetimepicker2'>
+                                                                {#                     <div class="col-sm-7" id='datetimepicker2'>#}
+                                                                <input type='text' class="form-control"
+                                                                       name="submit_test_time" id="submit_test_time"
+                                                                       required="required">
+                                                                <span class="input-group-addon">
+                             <span class="glyphicon glyphicon-calendar"></span>
+                         </span>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="lastname"
+                                                                   class="col-sm-3 control-label">用例总数</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control" name="case_num"
+                                                                       id="case_num" required="required"
+                                                                       oninput="value=value.replace(/[^\d]/g,'')"
+                                                                       placeholder="请输入冒烟用例总数">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="firstname"
+                                                                   class="col-sm-3 control-label">执行总数</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control"
+                                                                       name="executed_num" id="executed_num"
+                                                                       required="required"
+                                                                       oninput="value=value.replace(/[^\d]/g,'')"
+                                                                       placeholder="请输入已执行用例数">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="lastname"
+                                                                   class="col-sm-3 control-label">成功数</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control" name="pass_num"
+                                                                       id="pass_num" required="required"
+                                                                       oninput="value=value.replace(/[^\d]/g,'')"
+                                                                       placeholder="请输入已执行成功数">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="lastname"
+                                                                   class="col-sm-3 control-label">失败数</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" class="form-control" name="fail_num"
+                                                                       id="fail_num" required="required"
+                                                                       oninput="value=value.replace(/[^\d]/g,'')"
+                                                                       placeholder="请输入已执行失败数">
+                                                                </input>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    {#            模态框底部#}
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default"
+                                                                data-dismiss="modal">关闭
+                                                        </button>
+                                                        <input type="button" data-dissmiss="modal" onclick="add_smoke()"
+                                                               class="btn btn-primary" value="提交">
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal -->
+                                        </div>
+                                        {##}
+                                    </form>
+
+
+                                    <div class="row">
+                                        <div class='col-4'>
+                                            <a>合计 条</a>
+                                        </div>
+                                        {#                                        <div class='col-8'>#}
+                                        {#                                            {% show_pagination %}#}
+                                        {#                                        </div>#}
+                                        <div class='col-8'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script>
+        $("#send").click(function () {
+            var post_data = {
+                "location_type": "han11",
+            };
+            $.ajax({
+                url: "/api/locatype/",
+                type: "POST",
+                {#发送json数据到服务器#}
+                data: post_data,
+
+                {#请求成功回调函数#}
+                success: function (data) {
+                    alert("新增成功")
+                },
+                {#请求失败回调函数#}
+                error: function () {
+                    alert("服务器请求超时,请重试!")
+                }
+
+            });
+        });
+    </script>
+{% endblock javascripts %}

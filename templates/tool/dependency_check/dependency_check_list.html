@@ -1,0 +1,124 @@
+{% extends "layouts/base.html" %}
+{% load project_extras static %}
+{% block title %} 环境列表 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ basic-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5><span><i class="feather icon-home">  <a
+                                            href="{% url 'index' %}">首页</a></i></span>
+                                    </h5>
+                                    <span><i class="fa fa-map-marker"></i> check扫描列表</span>
+                                </div>
+
+                                <div class="card-block">
+                                    <div class='row'>
+                                        <div class="col-8">
+
+                                            <div class="col-6">
+                                                <div class="btn-group ">
+                                                    <a href="{% url 'checkadd' %}"
+                                                       class='btn btn-primary'>新增扫描</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-4">
+                                            <form class="form-inline mb-2">
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="search" ,
+                                                           id='search' ,
+                                                           placeholder="任务名称  /  创建人" ,
+                                                           value=>
+                                                </div>
+                                                <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive ">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>扫描名称</th>
+                                                <th>任务状态</th>
+                                                <th>任务结果</th>
+                                                <th>任务报告</th>
+                                                <th>创建时间</th>
+                                                <th>创建人</th>
+                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {% for c in check %}
+
+                                                <td>{{ c.id }}</td>
+                                                <td>{{ c.check_name }}</td>
+                                                <td>{{ c.task_state }}</td>
+                                                <td>{{ c.task_results }}</td>
+                                                <td>{{ c.task_report }}</td>
+                                                <td>{{ c.createtime }}</td>
+                                                <td>{{ c.creator }}</td>
+                                                <td>
+                                                    <button href="#" type="button" class="btn btn-danger"
+                                                            onclick="window.location.href='{% url 'check_delete' c.id %}';">
+                                                        <i class=" feather icon-trash-2"></i>删除
+                                                    </button>
+                                                </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class='col-4'>
+                                            <a>合计 {{ count_total }} 条</a>
+                                        </div>
+                                        <div class='col-8'>
+                                            {% show_pagination %}
+                                        </div>
+                                        <div class='col-8'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% endblock javascripts %}

@@ -21,10 +21,12 @@ class DevCreateForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(DevCreateForm, self).__init__(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        obj = super(DevCreateForm, self).save(commit=False)
-        obj.save()
-        return obj
+    def save(self, commit=True):
+        instance = forms.ModelForm.save(self, False)
+        if commit:
+            instance.save()
+        return instance
+
 
 
 class DevUpdateForm(forms.ModelForm):
