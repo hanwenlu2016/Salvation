@@ -31,6 +31,7 @@ class CheckTask(models.Model):
         ('finish', 'finish'),  # 已完成
         ('notstarted', 'notstarted'),)  # 未开始
 
+    task_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='任务id')
     check_name = models.CharField(max_length=100, verbose_name='扫描任务名称')
     file = models.FileField(upload_to=get_photo_path, verbose_name='上传文件路径')
     task_state = models.CharField(max_length=32, choices=STATE_CHOICE, default='notstarted', verbose_name='任务状态')

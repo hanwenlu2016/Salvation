@@ -9,7 +9,8 @@ import shutil
 
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse, Http404
+from django.views import View
 
 from django.views.generic import CreateView, ListView, DeleteView
 from django.core.paginator import Paginator
@@ -19,6 +20,7 @@ from tool.models import CheckTask
 from util.loginmixin import LoginMixin
 from util.loggers import logger
 from tool import tasks
+
 
 class CheckTaskListView(LoginMixin, ListView):
     """
@@ -110,8 +112,26 @@ class CheckTaskDeleteView(LoginMixin, DeleteView):
         try:
             if os.path.exists(flie_dir):
                 logger.info(f'{flie_dir} 删除目录文件成功!！')
-                shutil.rmtree(flie_dir) # 删除目录下的文件
+                shutil.rmtree(flie_dir)  # 删除目录下的文件
         except Exception as e:
             logger.error(e)
 
         return HttpResponseRedirect(success_url)
+
+
+class CheckDownloadView(View):
+
+    def get(self, request,id):
+        try:
+
+            check_file = CheckTask.objects.get(id=id)
+            if check_file:
+                if check_file.task_report.endswith('.html'):
+                    filename = check_file.task_report.split('/')[-1]
+                    response = FileResponse(open(check_file.task_report, 'rb'))
+                    response['Content-Type'] = 'application/octet-stream'
+                    response['Content-Disposition'] = 'attachment;filename={}'.format(filename)
+                    return response
+        except Exception as e:
+            logger.error(e)
+            raise Http404("文档不存在！")

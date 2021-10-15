@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from django import forms
 
 from ..models import CheckTask
@@ -80,22 +82,29 @@ class CheckTaskForm(forms.ModelForm):
             instance.updater = self.request.user
             instance.task_state = 'runing'  # 上传时修改任务状态
             instance.task_start_time = plus_seconds(5)  # 当前时间+5秒 大约任务开始时间
+
+            check_path = self.get_photo_path(instance)  # 处理扫描路径
+            instance.task_id = tasks.check_shell_task.delay(check_path, instance.check_name)  # 执行异步任务
             instance.save()
             logger.info(f'新增扫描任务成功！{instance.check_name}')
 
-        self.check_run_task(instance) #执行异步任务
         return instance
 
-    def check_run_task(self, instance):
+    def get_photo_path(self, instance):
         """
-        执行异步任务
-        :param instance:
+        拼接处理扫描路径
+        :param filename: 文件名称
+        :param file: 文件
         :return:
         """
-        try:
-            # 异步调取扫描任务
-            check_path = instance.file.file.name  # 文件保存路径
-            check_name = instance.check_name  # 扫描任务名称
-            tasks.check_shell_task.delay(check_path, check_name)
-        except Exception as e:
-            logger.error(e)
+        object_path = instance.file.path        # 项目路径
+        productionName = instance.check_name  # 获取任务名称
+        file =  instance.file.name          # 获取文件
+
+        check_files = 'upload/checkfiles'  # 固定路径
+        today = datetime.datetime.today()
+        year = today.year
+        month = today.month
+        day = today.day
+        flie_dir = os.path.abspath(os.path.join(object_path, ".."))  # 获取当前文件的上上个级目录
+        return f'{flie_dir}/{check_files}/{year}/{month}/{day}/{productionName}/{file}'

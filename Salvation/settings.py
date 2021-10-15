@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 import sys, os
 
@@ -148,19 +148,34 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# REST_FRAMEWORK = {
-#     # 用户认证
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.BasicAuthentication',
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.TokenAuthentication',],
-#
-# 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # 分页功能
-# 'PAGE_SIZE': 50  # 一页可现实数据条数
-# }
+REST_FRAMEWORK = {
+    # 用户认证
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication', ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # 分页功能
+    'PAGE_SIZE': 50  # 一页可现实数据条数
+}
 
 # check 扫描相关
-CHECK_SHELL_PATH = '/Users/reda-flight/Desktop/djwork/Salvation/toolsrc/dependency-check/bin/dependency-check.sh'  #  check.sh 脚本路径 task 执行时的路径
+CHECK_SHELL_PATH = '/Users/reda-flight/Desktop/djwork/Salvation/toolsrc/dependency-check/bin/dependency-check.sh'  # check.sh 脚本路径 task 执行时的路径
+
+#  celery 定时任务
+
+CELERY_BEAT_SCHEDULE = {
+    'update_checktask_table_task': {  # 更新任务表任务
+        'task': 'tool.tasks.update_checktask_table_task',
+        'schedule': timedelta(seconds=10),  # 每10秒执行一次
+    },
+
+    'delete_result_data_task': {  # 删除数据任务
+        'task': 'tool.tasks.delete_result_data_task',  # AppName应用的tasks.py文件中的方法名
+        'schedule': timedelta(hours=1),  # 每1小时执行
+
+    }
+}
 
 ############### celery 相关配置
 

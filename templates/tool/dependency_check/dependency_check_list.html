@@ -65,7 +65,6 @@
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
-                                                <th>id</th>
                                                 <th>扫描名称</th>
                                                 <th>任务状态</th>
                                                 <th>任务开始时间</th>
@@ -82,7 +81,6 @@
 
                                             {% for c in check %}
 
-                                                <td>{{ c.id }}</td>
                                                 <td>{{ c.check_name }}</td>
 
                                                 {% if c.task_state == 'notstarted' %}
@@ -93,13 +91,16 @@
                                                     <td>已完成</td>
                                                 {% endif %}
 
-                                                <td>{{ c.task_start_time|date:'Y-m-d H:i:s'|default:''}}</td>
+                                                <td>{{ c.task_start_time|date:'Y-m-d H:i:s'|default:'' }}</td>
                                                 <td>{{ c.task_end_time|date:'Y-m-d H:i:s'|default:'' }}</td>
                                                 <td>{{ c.task_results|default:'' }}</td>
-                                                <td>{{ c.task_report|default:'' }}</td>
+                                                <td><a href="{% url 'check_download' c.id %}"
+                                                       class="label theme-bg text-white f-12">查看报告</a>
+                                                </td>
                                                 <td>{{ c.task_msg|default:'' }}</td>
                                                 <td>{{ c.createtime|date:'Y-m-d H:i:s' }}</td>
                                                 <td>{{ c.creator }}</td>
+
                                                 <td>
                                                     <button href="#" type="button" class="btn btn-danger"
                                                             onclick="window.location.href='{% url 'check_delete' c.id %}';">
@@ -107,6 +108,7 @@
                                                     </button>
                                                 </td>
                                                 </tr>
+
                                             {% endfor %}
                                             </tbody>
                                         </table>
