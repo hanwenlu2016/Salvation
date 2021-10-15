@@ -68,8 +68,11 @@
                                                 <th>id</th>
                                                 <th>扫描名称</th>
                                                 <th>任务状态</th>
+                                                <th>任务开始时间</th>
+                                                <th>任务结束时间</th>
                                                 <th>任务结果</th>
                                                 <th>任务报告</th>
+                                                <th>任务消息</th>
                                                 <th>创建时间</th>
                                                 <th>创建人</th>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
@@ -81,10 +84,21 @@
 
                                                 <td>{{ c.id }}</td>
                                                 <td>{{ c.check_name }}</td>
-                                                <td>{{ c.task_state }}</td>
-                                                <td>{{ c.task_results }}</td>
-                                                <td>{{ c.task_report }}</td>
-                                                <td>{{ c.createtime }}</td>
+
+                                                {% if c.task_state == 'notstarted' %}
+                                                    <td>未开始</td>
+                                                {% elif c.task_state == 'runing' %}
+                                                    <td>运行中</td>
+                                                {% else %}
+                                                    <td>已完成</td>
+                                                {% endif %}
+
+                                                <td>{{ c.task_start_time|date:'Y-m-d H:i:s'|default:''}}</td>
+                                                <td>{{ c.task_end_time|date:'Y-m-d H:i:s'|default:'' }}</td>
+                                                <td>{{ c.task_results|default:'' }}</td>
+                                                <td>{{ c.task_report|default:'' }}</td>
+                                                <td>{{ c.task_msg|default:'' }}</td>
+                                                <td>{{ c.createtime|date:'Y-m-d H:i:s' }}</td>
                                                 <td>{{ c.creator }}</td>
                                                 <td>
                                                     <button href="#" type="button" class="btn btn-danger"

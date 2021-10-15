@@ -4,9 +4,12 @@
 # @E-mail: wenlupay@163.com
 # @Time: 2021/10/13  11:35
 
+import os.path
+import shutil
 
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 
 from django.views.generic import CreateView, ListView, DeleteView
 from django.core.paginator import Paginator
@@ -14,7 +17,8 @@ from tool.forms.check_from import CheckTaskForm
 from tool.models import CheckTask
 
 from util.loginmixin import LoginMixin
-
+from util.loggers import logger
+from tool import tasks
 
 class CheckTaskListView(LoginMixin, ListView):
     """
@@ -27,7 +31,6 @@ class CheckTaskListView(LoginMixin, ListView):
     order_field = "-createtime"
     created_by = ''
     pagenum = 5  # 每页分页数据条数
-
 
     def get_queryset(self):
         search = self.request.GET.get("search")
@@ -65,6 +68,7 @@ class CheckTaskListView(LoginMixin, ListView):
         context['created_by'] = self.created_by
         return context
 
+
 class CheckTaskCreateView(LoginMixin, CreateView):
     """
     添加扫描任务 视图
@@ -73,18 +77,41 @@ class CheckTaskCreateView(LoginMixin, CreateView):
     form_class = CheckTaskForm
     template_name = "tool/dependency_check/dependency_check_add.html"
 
-
     def get_form_kwargs(self):
         # Ensure the current `request` is provided to ProjectCreateForm.
         kwargs = super(CheckTaskCreateView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
+
         return kwargs
+
 
 class CheckTaskDeleteView(LoginMixin, DeleteView):
     """
     删除扫描任务
     """
-    #template_name_suffix='_delete'
+    # template_name_suffix='_delete'
     template_name = "tool/dependency_check/dependency_check_delete.html"
     model = CheckTask
     success_url = reverse_lazy('checklist')
+
+    def delete(self, request, *args, **kwargs):
+
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+
+        # 删除目录文件
+        flie_path = self.object.file.file.name  # 获取文件路径
+        flie_dir = os.path.abspath(os.path.join(flie_path, ".."))  # 获取当前文件的上级目录
+        try:
+            if os.path.exists(flie_dir):
+                logger.info(f'{flie_dir} 删除目录文件成功!！')
+                shutil.rmtree(flie_dir) # 删除目录下的文件
+        except Exception as e:
+            logger.error(e)
+
+        return HttpResponseRedirect(success_url)

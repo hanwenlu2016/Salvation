@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'crispy_forms',
     'rest_framework',
+    'django_celery_beat',  # 定时任务
+    'django_celery_results',  # 查看 celery 执行结果
     'rest_framework.authtoken',
     'django_filters',
     'oauth',
@@ -156,3 +158,64 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',  # 分页功能
 # 'PAGE_SIZE': 50  # 一页可现实数据条数
 # }
+
+# check 扫描相关
+CHECK_SHELL_PATH = '/Users/reda-flight/Desktop/djwork/Salvation/toolsrc/dependency-check/bin/dependency-check.sh'  #  check.sh 脚本路径 task 执行时的路径
+
+############### celery 相关配置
+
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_ENABLE_UTC = True
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # celery 结果返回，可用于跟踪结果
+CELERY_RESULT_BACKEND = 'django-db'  # 使用 database 作为结果存储
+CELERY_CACHE_BACKEND = 'django-cache'  # celery 后端缓存
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERYD_MAX_TASKS_PER_CHILD = 50  # 由于长期运行会导致内存不释放，需要设置池子回收
+CELERYD_CONCURRENCY = 5  # worker的并发数
+
+###### 日志相关
+cur_path = os.path.dirname(os.path.realpath(__file__))  # log_path是存放日志的路径
+log_path = os.path.join(os.path.dirname(cur_path), 'logs')
+if not os.path.exists(log_path): os.mkdir(log_path)  # 如果不存在这个logs文件夹，就自动创建一个
+
+# 日志配置
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s][%(filename)s:%(lineno)d][%(levelname)s]--%(message)s'
+        },
+    },
+    'handlers': {
+        # 输出日志的控制台
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        # 输出日志到文件，按日期滚动
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/salvation.log',
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 100,
+            'formatter': 'verbose'
+        },
+
+    },
+    'loggers': {
+        # 不同的logger
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

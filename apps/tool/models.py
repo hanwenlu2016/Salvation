@@ -16,7 +16,7 @@ def get_photo_path(instance, filename):
     """
 
     productionName = instance.check_name  # 获取文件名称
-    check_files = 'upload/check/files'    # 固定路径
+    check_files = 'upload/checkfiles'    # 固定路径
     today = datetime.datetime.today()
     year = today.year
     month = today.month
@@ -36,6 +36,9 @@ class CheckTask(models.Model):
     task_state = models.CharField(max_length=32, choices=STATE_CHOICE, default='notstarted', verbose_name='任务状态')
     task_results = models.CharField(max_length=32, null=True, blank=True, verbose_name='任务结果')
     task_report = models.CharField(max_length=1000, null=True, blank=True, verbose_name='任务报告')
+    task_msg = models.CharField(max_length=1000, null=True, blank=True, verbose_name='运行消息')
+    task_start_time = models.DateTimeField(verbose_name='任务开始时间', null=True, blank=True)
+    task_end_time = models.DateTimeField(verbose_name='任务结束时间', null=True, blank=True)
     createtime = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     creator = models.CharField(max_length=32, verbose_name='创建人')
 

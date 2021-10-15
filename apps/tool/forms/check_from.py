@@ -2,13 +2,10 @@
 from django import forms
 
 from ..models import CheckTask
-
-
-
-
-
-
-
+from util.loggers import logger
+import datetime
+from util.time_processing import plus_seconds
+from tool import tasks
 
 
 class CheckTaskForm(forms.ModelForm):
@@ -18,8 +15,9 @@ class CheckTaskForm(forms.ModelForm):
 
     class Meta:
         model = CheckTask
-        exclude = ['task_state', 'task_results', 'task_report', 'createtime', 'creator']
-        fields = '__all__'
+        # exclude = ['task_state', 'task_results', 'task_report', 'createtime', 'creator']
+        fields = ('check_name', 'file')
+        # fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -29,19 +27,31 @@ class CheckTaskForm(forms.ModelForm):
         """
         验证文件名
         """
-        dangerChars = [';', '|', '"', "'", '&', '^', '%', '$', '@',' ']
+        dangerChars = [';', '|', '"', "'", '&', '^', '%', '$', '@', ' ']
         for c in dangerChars:
             if c in filename:
                 return True
         return False
 
+    def clean_check_name(self):
+        """
+        检查扫描任
+        :return:
+        """
+        check_name = self.cleaned_data.get("check_name")
+        if CheckTask.objects.filter(check_name=check_name).count() != 0:
+            logger.error(f'新增扫描任务失败！扫描任务已经存在！')
+            raise forms.ValidationError("新增扫描任务失败！扫描任务已经存在！")
+        return check_name
+
     def clean_file(self):
         """
-        验证手机号码合法性
+        验证文件合法合法性
         :return:
         """
 
         f = self.cleaned_data.get("file")
+
         if f:
             # 支持的格式
             allow_suffix = ['tar', '7z', 'zip', 'gz', 'war', 'so', 'rar', 'bz2', 'arj', 'cab', 'lzh', 'iso', 'UUE',
@@ -50,15 +60,42 @@ class CheckTaskForm(forms.ModelForm):
             file_suffix = f.name.split(".")[-1].lower()
 
             if file_suffix not in allow_suffix:
+                logger.error(f'新增扫描任务失败！文件格式错误，请重新上传!')
                 raise forms.ValidationError("文件格式错误，请重新上传!")
+
+            if f.size > 524288000:  # 500*1024*1024 限制大于500m的文件
+                logger.error(f'新增扫描任务失败！文件不能大于500M，请重新上传!')
+                raise forms.ValidationError("文件不能大于500M，请重新上传!")
+
             if self.illegalFileName(f.name):
+                logger.error(f'新增扫描任务失败！文件名非法，请重新上传!')
                 raise forms.ValidationError("文件名非法，请重新上传!")
         return f
 
     def save(self, commit=True):
         instance = forms.ModelForm.save(self, False)
+
         if commit:
             instance.creator = self.request.user
             instance.updater = self.request.user
+            instance.task_state = 'runing'  # 上传时修改任务状态
+            instance.task_start_time = plus_seconds(5)  # 当前时间+5秒 大约任务开始时间
             instance.save()
+            logger.info(f'新增扫描任务成功！{instance.check_name}')
+
+        self.check_run_task(instance) #执行异步任务
         return instance
+
+    def check_run_task(self, instance):
+        """
+        执行异步任务
+        :param instance:
+        :return:
+        """
+        try:
+            # 异步调取扫描任务
+            check_path = instance.file.file.name  # 文件保存路径
+            check_name = instance.check_name  # 扫描任务名称
+            tasks.check_shell_task.delay(check_path, check_name)
+        except Exception as e:
+            logger.error(e)
