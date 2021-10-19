@@ -177,6 +177,10 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
+# AES加解密
+KEY = 'rk.=278ZAmb~0&]F'
+IV = '1dd89`X3nVfmchm?'
+
 ############### celery 相关配置
 
 CELERY_TIMEZONE = 'Asia/Shanghai'

@@ -27,7 +27,7 @@ urlpatterns = [
     path('', include('oauth.urls')),
     path('api/', include(router.urls)),
     path('project/', include('project.urls')),
-    path('check/', include('tool.urls')),
+    path('tool/', include('tool.urls')),
     path('eln/', ElementListView.as_view(), name='eln'),
 ]
 

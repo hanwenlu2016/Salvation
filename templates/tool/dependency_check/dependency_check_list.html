@@ -43,6 +43,25 @@
                                                     <a href="{% url 'checkadd' %}"
                                                        class='btn btn-primary'>新增扫描</a>
                                                 </div>
+
+                                                <div class="btn-group ">
+                                                    {% if created_by == '' %}
+                                                        <button class="btn btn-light dropdown-toggle" type="button"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">扫描结果
+                                                        </button>
+                                                    {% else %}
+                                                        <button class="btn btn-light dropdown-toggle" type="button"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">{{ created_by }} </button>
+                                                    {% endif %}
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'checklist' %}?created_by=成功&search={{ search }}">成功</a>
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'checklist' %}?created_by=失败&search={{ search }}">失败</a>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         </div>
@@ -53,7 +72,7 @@
                                                            class="form-control"
                                                            name="search" ,
                                                            id='search' ,
-                                                           placeholder="任务名称  /  创建人" ,
+                                                           placeholder="扫描名称  /  创建人" ,
                                                            value=>
                                                 </div>
                                                 <button type="submit" class="btn btn-secondary mb-2 btn-sm">搜索</button>
@@ -67,22 +86,20 @@
                                             <tr>
                                                 <th>扫描名称</th>
                                                 <th>任务状态</th>
-                                                <th>任务开始时间</th>
-                                                <th>任务结束时间</th>
-                                                <th>任务结果</th>
-                                                <th>任务报告</th>
-                                                <th>任务消息</th>
+
+                                                <!--<th>扫描开始时间</th>-->
+                                                <th>扫描结束时间</th>
+                                                <th>扫描结果</th>
                                                 <th>创建时间</th>
                                                 <th>创建人</th>
+                                                <th>扫描报告</th>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
 
                                             {% for c in check %}
-
                                                 <td>{{ c.check_name }}</td>
-
                                                 {% if c.task_state == 'notstarted' %}
                                                     <td>未开始</td>
                                                 {% elif c.task_state == 'runing' %}
@@ -91,20 +108,33 @@
                                                     <td>已完成</td>
                                                 {% endif %}
 
-                                                <td>{{ c.task_start_time|date:'Y-m-d H:i:s'|default:'' }}</td>
+                                                <!-- <td>{{ c.task_start_time|date:'Y-m-d H:i:s'|default:'' }}</td>-->
                                                 <td>{{ c.task_end_time|date:'Y-m-d H:i:s'|default:'' }}</td>
-                                                <td>{{ c.task_results|default:'' }}</td>
-                                                <td><a href="{% url 'check_download' c.id %}"
-                                                       class="label theme-bg text-white f-12">查看报告</a>
-                                                </td>
-                                                <td>{{ c.task_msg|default:'' }}</td>
+
+                                                {% if c.task_results == 'SUCCESS' %}
+                                                    <td>成功</td>
+                                                {% elif c.task_results == 'FAIL' %}
+                                                    <td>失败</td>
+                                                {% else %}
+                                                    <td>扫描中...</td>
+                                                {% endif %}
+
+                                                <!-- <td>{{ c.task_msg|default:'' }}</td>-->
                                                 <td>{{ c.createtime|date:'Y-m-d H:i:s' }}</td>
                                                 <td>{{ c.creator }}</td>
 
+                                                {% if c.task_report == None %}
+                                                    <td>扫描中...</td>
+                                                {% else %}
+                                                    <td><a href="{% url 'check_download' c.id %}"
+                                                           class="btn btn-outline-primary">查看报告</a>
+                                                    </td>
+                                                {% endif %}
+
                                                 <td>
-                                                    <button href="#" type="button" class="btn btn-danger"
+                                                    <button href="#" type="button" class="btn btn-square btn-danger"
                                                             onclick="window.location.href='{% url 'check_delete' c.id %}';">
-                                                        <i class=" feather icon-trash-2"></i>删除
+                                                        <i class="feather icon-trash-2"></i>删除
                                                     </button>
                                                 </td>
                                                 </tr>

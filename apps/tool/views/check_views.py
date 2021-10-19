@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @File: check_views.py
-# @Author: HanWenLu
-# @E-mail: wenlupay@163.com
-# @Time: 2021/10/13  11:35
 
 import os.path
 import shutil
@@ -37,7 +33,7 @@ class CheckTaskListView(LoginMixin, ListView):
     def get_queryset(self):
         search = self.request.GET.get("search")
         order_by = self.request.GET.get("orderby")
-        filter_isenabled = self.request.GET.get("created_by")
+        filter_state = self.request.GET.get("created_by")
 
         if order_by:
             check_pro = CheckTask.objects.all().order_by(order_by)
@@ -45,9 +41,17 @@ class CheckTaskListView(LoginMixin, ListView):
         else:
             check_pro = CheckTask.objects.all().order_by(self.order_field)
 
-        if filter_isenabled:
-            self.created_by = filter_isenabled
-            check_pro = CheckTask.objects.filter(isenabled=self.created_by)
+        if filter_state:
+
+            if filter_state=='成功':
+                filter_state_q='SUCCESS'
+                filter_state_d='成功'
+            else:
+                filter_state_q='FAIL'
+                filter_state_d='失败'
+
+            self.created_by = filter_state
+            check_pro = CheckTask.objects.filter(task_results=filter_state_q)
 
         if search:
             # 任务名称 、创建人、
