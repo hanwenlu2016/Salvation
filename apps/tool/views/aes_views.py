@@ -12,38 +12,73 @@ from util.loggers import logger
 
 # AES 加解密视图
 class AesView(LoginMixin, View):
-    data = {
-        "key": KEY,
-        "iv": IV,
-        'data': None,
-        'code': None
-    }
+    # data = {
+    #     "key": KEY,
+    #     "iv": IV,
+    #     'data': None,
+    #     'code': None
+    # }
 
     def get(self, request):
-        return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": self.data})
+        html_data = {
+            "key": KEY,
+            "iv": IV,
+            'data': None,
+            'code': None
+        }
+        if request.GET.get('data') is not None:
+            try:
+                submit = request.GET.get('submit')
+                key = request.GET.get('key')
+                iv = request.GET.get('iv')
+                data = request.GET.get('data')
 
-    def post(self, request):
-        try:
-            submit = request.POST.get('submit')
-            if submit=='加密':
+                html_data['key'] = key
+                html_data['iv'] = iv
 
-                key = request.POST.get('key')
-                iv = request.POST.get('iv')
-                data = request.POST.get('data')
                 aes = AesDecryptEncrypt(key, iv)
-                code = aes.encrypt(data)
-                self.data['data'] = data
-                self.data['code'] = code
-            else:  #解密
-                key = request.POST.get('key')
-                iv = request.POST.get('iv')
-                data = request.POST.get('data')
-                aes = AesDecryptEncrypt(key, iv)
-                code = aes.decrypt(data)
-                self.data['data'] = data
-                self.data['code'] = code
-        except Exception as e:
-            logger.error(f'解密异常！{e}')
 
-        return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": self.data})
-        # return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": data})
+                if submit == '加密':
+                    code = aes.encrypt(data)
+                elif submit == '解密':
+                    code = aes.decrypt(data)
+                else:  # 解密
+                    code = None
+                    data = None
+                    html_data['key'] = KEY
+                    html_data['iv'] = IV
+
+                html_data['data'] = data
+                html_data['code'] = code
+
+            except Exception as e:
+                logger.error(f'解密异常！{e}')
+            return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": html_data})
+        else:
+            return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": html_data})
+
+    # def post(self, request):
+    #     try:
+    #         submit = request.POST.get('submit')
+    #         if submit == '加密':
+    #
+    #             key = request.POST.get('key')
+    #             iv = request.POST.get('iv')
+    #             data = request.POST.get('data')
+    #             aes = AesDecryptEncrypt(key, iv)
+    #             code = aes.encrypt(data)
+    #             self.data['data'] = data
+    #             self.data['code'] = code
+    #         else:  # 解密
+    #             key = request.POST.get('key')
+    #             iv = request.POST.get('iv')
+    #             data = request.POST.get('data')
+    #             aes = AesDecryptEncrypt(key, iv)
+    #             code = aes.decrypt(data)
+    #             self.data['data'] = data
+    #             self.data['code'] = code
+    #     except Exception as e:
+    #         logger.error(f'解密异常！{e}')
+    #
+    #     return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": self.data})
+    # return render(request, 'tool/aes/aes_decrypt_encrypt.html', {"data": data})

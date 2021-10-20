@@ -6,6 +6,7 @@
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
 
+
 {% block content %}
 
     {% block fromadd %}
@@ -18,25 +19,39 @@
                 <span><i class="fa fa-map-marker"></i> AES加解密</span>
             </div>
             <div class="card-block table-border-style">
-                <form method="post" enctype="multipart/form-data">
+                <form id="frm1" method="GET" enctype="multipart/form-data">
                     {% csrf_token %}
                     <h5>公共key:</h5>
-                    <div class="input-group mb-3">
-                        <input name="key" class="form-control" required="required" maxlength="30"
-                               placeholder="公共key" value="{{ data.key }}">
-                    </div>
-                    <h5>偏移量iv:</h5>
-                    <div class="input-group mb-3">
-                        <input name="iv" class="form-control" required="required" maxlength="30"
-                               placeholder="偏移量iv" value="{{ data.iv }}">
-                    </div>
+                    {% if data.key == 'rk.=278ZAmb~0&]F' %}
+                        <div class="input-group mb-3">
+                            <input name="key" class="form-control" required="required" maxlength="30"
+                                   placeholder="公共key" value='rk.=278ZAmb~0&]F'>
+                        </div>
+                    {% else %}
+                        <div class="input-group mb-3">
+                            <input name="key" class="form-control" required="required" maxlength="30"
+                                   placeholder="公共key" value={{ data.key }}>
+                        </div>
+                    {% endif %}
 
+                    <h5>偏移量iv:</h5>
+                    {% if data.key == 'rk.=278ZAmb~0&]F' %}
+                        <div class="input-group mb-3">
+                            <input name="iv" class="form-control" required="required" maxlength="30" id="iv"
+                                   placeholder="偏移量iv" value='1dd89`X3nVfmchm?'>
+                        </div>
+                    {% else %}
+                        <div class="input-group mb-3">
+                            <input name="iv" class="form-control" required="required" maxlength="30"
+                                   placeholder="偏移量iv" value={{ data.iv }}>
+                        </div>
+                    {% endif %}
                     {% if data.data == Node %}
-                    <div class="col-sm- col-xl-8">
+                        <div class="col-sm- col-xl-8">
                         <textarea class="form-control max-textarea" name="data" placeholder="请输入需要加解密的参数"
                                   required="required"
                                   maxlength="255" rows="10"></textarea>
-                    </div>
+                        </div>
                     {% else %}
                         <div class="col-sm- col-xl-8">
                         <textarea class="form-control max-textarea" name="data" placeholder="请输入需要加解密的参数"
@@ -46,19 +61,22 @@
                     {% endif %}
                     <br>
                     {% if data.code == Node %}
-                    <div class="col-sm-12 col-xl-8">
-                        <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
-                                  maxlength="255" rows="10"  readonly="readonly"  ></textarea></div>
-                     {% else %}
                         <div class="col-sm-12 col-xl-8">
                         <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
-                                  maxlength="255" rows="10"  readonly="readonly"  >{{ data.code}}</textarea>
+                                  maxlength="255" rows="10" readonly="readonly"></textarea>
+                        </div>
+                    {% else %}
+                        <div class="col-sm-12 col-xl-8">
+                        <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
+                                  maxlength="255" rows="10" id="biao1" readonly="readonly">{{ data.code }}</textarea>
                         </div>
                     {% endif %}
                     <br>
                     &thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;
                     <input type="submit" class="btn btn-primary" name="submit" value="加密"/>
                     <input type="submit" class="btn btn-success" name="submit" value="解密"/>
+                    <input type="submit" class="btn btn-info" name="submit" value="重置"/>
+                    <input type="button" class="btn btn-secondary" onclick="copytext()" value="复制">
                 </form>
             </div>
         </div>
@@ -68,5 +86,15 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+    <script>
+        function copytext() {
+            var copytext2 = document.getElementById("biao1");
+            copytext2.select();
+            document.execCommand("copy");
+            alert(copytext2.value + ' 复制成功！',);
+        }
+    </script>
+
+
 {% endblock javascripts %}
 
