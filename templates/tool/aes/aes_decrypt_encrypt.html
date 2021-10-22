@@ -2,9 +2,16 @@
 
 {% load  static crispy_forms_tags %}
 {% block title %}AES 加解密 {% endblock %}
+<head>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+</head>
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+
+{% endblock stylesheets %}
 
 
 {% block content %}
@@ -72,12 +79,23 @@
                         </div>
                     {% endif %}
                     <br>
-                    &thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp;
+
                     <input type="submit" class="btn btn-primary" name="submit" value="加密"/>
                     <input type="submit" class="btn btn-success" name="submit" value="解密"/>
                     <input type="submit" class="btn btn-info" name="submit" value="重置"/>
                     <input type="button" class="btn btn-secondary" onclick="copytext()" value="复制">
                 </form>
+{#            复制弹框#}
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                {{ data.code }} &nbsp;&nbsp;复制成功！
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
             </div>
         </div>
     {% endblock fromadd %}
@@ -86,12 +104,19 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+
     <script>
         function copytext() {
             var copytext2 = document.getElementById("biao1");
             copytext2.select();
             document.execCommand("copy");
-            alert(copytext2.value + ' 复制成功！',);
+            alert2();
+            {#alert(copytext2.value + ' 复制成功！',);#}
+        }
+        function alert2()
+        {
+            $('#myModal').modal('show');
+            setTimeout(function(){$('#myModal').modal('hide');},1000);
         }
     </script>
 
