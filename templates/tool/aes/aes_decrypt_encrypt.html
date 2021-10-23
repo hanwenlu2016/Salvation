@@ -28,65 +28,75 @@
             <div class="card-block table-border-style">
                 <form id="frm1" method="GET" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <h5>公共key:</h5>
+                    <h5 class="col-sm- col-xl-8">公共key :</h5>
                     {% if data.key == 'rk.=278ZAmb~0&]F' %}
-                        <div class="input-group mb-3">
+                        <div class="col-sm- col-xl-8">
                             <input name="key" class="form-control" required="required" maxlength="30"
                                    placeholder="公共key" value='rk.=278ZAmb~0&]F'>
                         </div>
                     {% else %}
-                        <div class="input-group mb-3">
+                        <div class="col-sm- col-xl-8">
                             <input name="key" class="form-control" required="required" maxlength="30"
                                    placeholder="公共key" value={{ data.key }}>
                         </div>
                     {% endif %}
+                    <br>
 
-                    <h5>偏移量iv:</h5>
+                    <h5 class="col-sm- col-xl-8">偏移量iv :</h5>
                     {% if data.key == 'rk.=278ZAmb~0&]F' %}
-                        <div class="input-group mb-3">
+                        <div class="col-sm- col-xl-8">
                             <input name="iv" class="form-control" required="required" maxlength="30" id="iv"
                                    placeholder="偏移量iv" value='1dd89`X3nVfmchm?'>
                         </div>
                     {% else %}
-                        <div class="input-group mb-3">
+                        <div class="col-sm- col-xl-8">
                             <input name="iv" class="form-control" required="required" maxlength="30"
                                    placeholder="偏移量iv" value={{ data.iv }}>
                         </div>
                     {% endif %}
+                    <br>
+
+                    <h5 class="col-sm- col-xl-8">加解密参数 :</h5>
                     {% if data.data == Node %}
                         <div class="col-sm- col-xl-8">
                         <textarea class="form-control max-textarea" name="data" placeholder="请输入需要加解密的参数"
                                   required="required"
-                                  maxlength="255" rows="10"></textarea>
+                                  maxlength="255" rows="6"></textarea>
                         </div>
                     {% else %}
                         <div class="col-sm- col-xl-8">
                         <textarea class="form-control max-textarea" name="data" placeholder="请输入需要加解密的参数"
                                   required="required"
-                                  maxlength="255" rows="10">{{ data.data }}</textarea>
-                        </div>
-                    {% endif %}
-                    <br>
-                    {% if data.code == Node %}
-                        <div class="col-sm-12 col-xl-8">
-                        <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
-                                  maxlength="255" rows="10" readonly="readonly"></textarea>
-                        </div>
-                    {% else %}
-                        <div class="col-sm-12 col-xl-8">
-                        <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
-                                  maxlength="255" rows="10" id="biao1" readonly="readonly">{{ data.code }}</textarea>
+                                  maxlength="255" rows="6">{{ data.data }}</textarea>
                         </div>
                     {% endif %}
                     <br>
 
-                    <input type="submit" class="btn btn-primary" name="submit" value="加密"/>
-                    <input type="submit" class="btn btn-success" name="submit" value="解密"/>
-                    <input type="submit" class="btn btn-info" name="submit" value="重置"/>
-                    <input type="button" class="btn btn-secondary" onclick="copytext()" value="复制">
+                    <h5 class="col-sm- col-xl-8">加解密结果 :</h5>
+                    {% if data.code == Node %}
+                        <div class="col-sm-12 col-xl-8">
+                        <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
+                                  maxlength="255" rows="3" readonly="readonly"></textarea>
+                        </div>
+                    {% else %}
+                        <div class="col-sm-12 col-xl-8">
+                        <textarea class="form-control max-textarea" name="code" placeholder="已经处理完的加解密结果"
+                                  maxlength="255" rows="3" id="biao1" readonly="readonly">{{ data.code }}</textarea>
+                        </div>
+                    {% endif %}
+                    <br>
+
+                    <div class="col-sm- col-xl-8">
+                        <input type="submit" class="btn btn-primary" name="submit" value="加密"/>
+                        <input type="submit" class="btn btn-success" name="submit" value="解密"/>
+                        <input type="submit" class="btn btn-info" name="submit" value="重置"/>
+                        <input type="button" class="btn btn-secondary" onclick="copytext()" value="复制">
+                    </div>
+
                 </form>
-{#            复制弹框#}
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                {#            复制弹框#}
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-body">
@@ -113,10 +123,12 @@
             alert2();
             {#alert(copytext2.value + ' 复制成功！',);#}
         }
-        function alert2()
-        {
+
+        function alert2() {
             $('#myModal').modal('show');
-            setTimeout(function(){$('#myModal').modal('hide');},1000);
+            setTimeout(function () {
+                $('#myModal').modal('hide');
+            }, 1000);
         }
     </script>
 
