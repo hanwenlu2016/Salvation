@@ -1,0 +1,93 @@
+{% extends "layouts/base.html" %}
+
+{% load  static crispy_forms_tags %}
+{% block title %}FTP 下载 {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+    {% block fromadd %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-b-10">
+                                        <span><i class="feather icon-box">  <a
+                                                href="{% url 'index' %}">首页</a></i></span>
+                </h5>
+                <span><i class="fa fa-map-marker"></i> FTP文件下载</span>
+            </div>
+            <div class="card-block table-border-style">
+                <form method="GET" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <h5 class="col-sm- col-xl-8">ftp地址 :</h5>
+                    <div class="col-sm- col-xl-8">
+                        <input name="ftp_host" class="form-control" required="required" maxlength="30"
+                               placeholder="ftp地址">
+                    </div>
+                    <br>
+
+                    <h5 class="col-sm- col-xl-8">ftp端口 :</h5>
+                    <div class="col-sm- col-xl-8">
+                        <input name="ftp_port" class="form-control" required="required" maxlength="7"
+                               placeholder="ftp端口" value='21'>
+                    </div>
+                    <br>
+
+                    <h5 class="col-sm- col-xl-8">ftp账号 :</h5>
+                    <div class="col-sm- col-xl-8">
+                        <input name="ftp_name" class="form-control" required="required" maxlength="200"
+                               placeholder="ftp账号">
+                    </div>
+                    <br>
+
+                    <h5 class="col-sm- col-xl-8">ftp密码 :</h5>
+                    <div class="col-sm- col-xl-8">
+                        <input name="ftp_pwd" class="form-control" required="required" maxlength="30"
+                               placeholder="ftp密码">
+                    </div>
+                    <br>
+
+                    <h5 class="col-sm- col-xl-8">ftp文件目录 :</h5>
+                    <div class="col-sm- col-xl-8">
+                        <input name="ftp_file" class="form-control" required="required" maxlength="500"
+                               placeholder="ftp文件或目录">
+                    </div>
+                    <br>
+
+                    <div class="col-sm- col-xl-8">
+                        <div class="alert alert-warning" role="alert">
+                            如果下载文件过多请直接使用工具下载！ <a href="{% url 'ftp_tool' %}" class="btn btn-success">工具</a>
+                        </div>
+                    </div>
+
+                    {% if msg %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong></strong> {{ msg }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-sm- col-xl-8">
+                        <input type="submit" class="btn btn-primary" name="submit" value="下载"/>
+                        <input type="reset" class="btn btn-secondary" value="重置"/>
+                    </div>
+                    <br>
+
+                </form>
+            </div>
+        </div>
+    {% endblock fromadd %}
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
+
