@@ -72,7 +72,7 @@ class ProjectDetailView(LoginMixin, DetailView):
     项目详情 视图
     """
     model = Project
-    template_name = "project_manage/project/../../../templates/project_manage/project/project_detail.html"
+    template_name = "project_manage/project/project_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)

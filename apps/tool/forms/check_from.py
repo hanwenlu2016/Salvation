@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 
 from django import forms
 
@@ -18,7 +19,7 @@ class CheckTaskForm(forms.ModelForm):
     class Meta:
         model = CheckTask
         # exclude = ['task_state', 'task_results', 'task_report', 'createtime', 'creator']
-        fields = ('check_name', 'file')
+        fields = ('check_name', 'file','tag')
         # fields = '__all__'
 
     def __init__(self, *args, **kwargs):
@@ -41,10 +42,18 @@ class CheckTaskForm(forms.ModelForm):
         :return:
         """
         check_name = self.cleaned_data.get("check_name")
+        zhmodel = re.compile(u'[\u4e00-\u9fa5]')
+        match = zhmodel.search(check_name)
+
         if CheckTask.objects.filter(check_name=check_name).count() != 0:
-            logger.error(f'新增扫描任务失败！扫描任务已经存在！')
+            logger.error('新增扫描任务失败！扫描任务已经存在！')
             raise forms.ValidationError("新增扫描任务失败！扫描任务已经存在！")
-        return check_name
+
+        if match:
+            logger.error('新增扫描任务失败！请勿输入中文命名')
+            raise forms.ValidationError("新增扫描任务失败！请勿输入中文命名！")
+        else:
+            return check_name
 
     def clean_file(self):
         """

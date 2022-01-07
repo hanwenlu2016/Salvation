@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from django.http import FileResponse, Http404
+from django.http import FileResponse
 from django.shortcuts import render
 from django.views import View
 

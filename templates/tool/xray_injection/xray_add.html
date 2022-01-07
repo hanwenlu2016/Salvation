@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% load  static crispy_forms_tags %}
-{% block title %} 新增 dependency-check 扫描任务 {% endblock %}
+{% block title %} 新增 sql注入扫描任务 {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -15,21 +15,21 @@
                                         <span><i class="feather icon-box">  <a
                                                 href="#">扫描列表</a></i></span>
                 </h5>
-                <span><i class="fa fa-map-marker"></i> 新增扫描任务 </span>
+                <span><i class="fa fa-map-marker"></i> 新增xray任务 </span>
             </div>
             <div class="card-block table-border-style">
                 <form method="post" enctype="multipart/form-data">
                     <div class="alert alert-warning" role="alert">
-                        扫描说明: 基于请上传 zip, tar, war等类型压缩包，压缩包内包含jar包或者扫描文件即可！任务名称和文件请勿使用中文！
-                        <a href="https://github.com/jeremylong/DependencyCheck"
-                           class="label theme-bg2 text-white f-12">详情可查看工具文档</a>
+                        扫描说明 : 基于xray工具扫描，支持(XSS漏洞检测、SQL 注入检测等。
+                         <a href="https://docs.xray.cool/#/"
+                                     class="label theme-bg2 text-white f-12">详情可查看工具文档</a>
                     </div>
                     {% csrf_token %}
                     {{ form|crispy }}
 
                     <button type="submit" class="btn btn-primary">提交任务</button>
                     <button type="button" class="btn btn-danger"
-                            onclick="window.location.href='{% url 'checklist' %}';">取消
+                            onclick="window.location.href='{% url 'xraylist' %}';">取消
                     </button>
                 </form>
 

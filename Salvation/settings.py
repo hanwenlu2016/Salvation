@@ -179,9 +179,9 @@ CELERY_BEAT_SCHEDULE = {
 
 ############### 工具相关配置
 
-# AES加解密
-KEY = 'rk.=278ZAmb~0&]F'
-IV = '1dd89`X3nVfmchm?'
+# AES加解密 默认参数配置
+KEY = '0000000000000000'
+IV = 'aaaaaaaaaaaaaaaa'
 
 # ftp工具下载路径
 FTP_PATH = '/upload/tool/FTPdownload.zip'

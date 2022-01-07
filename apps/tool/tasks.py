@@ -2,6 +2,7 @@
 import hashlib
 import os
 import datetime
+import time
 
 from django_celery_results.models import TaskResult
 from celery import shared_task
@@ -10,8 +11,26 @@ from util.loggers import logger
 from Salvation import settings
 from tool.models import CheckTask
 
+def get_photo_xraypath():
+    """
+    sql 扫描结果路径创建生成
+    :return:
+    """
+    pwd = os.path.abspath('.')
+    check_files = 'upload/xrayfiles'  # 固定路径
+    today = datetime.datetime.today()
+    year = today.year
+    month = today.month
+    day = today.day
+    time_tag = int(time.time())
+    sqlpath = f'{pwd}/{check_files}/{year}-{month}-{day}/'
 
-def check_shell(check_path, check_name):
+    if not os.path.exists(sqlpath):
+        os.makedirs(sqlpath)
+
+    return sqlpath + f'{time_tag}.html'
+
+def check_shell(check_path: str, check_name: str) -> str:
     """
     扫描脚本
     :param check_path:  项目扫描路径
@@ -27,18 +46,47 @@ def check_shell(check_path, check_name):
 
     try:
         logger.info('开始执行扫描任务!!!')
-        shell = f'{settings.CHECK_SHELL_PATH} --project {check_name} --scan {check_path} -o {output}'
+        shell_path = os.path.abspath('.') + settings.CHECK_SHELL_PATH
+        shell = f'{shell_path} --project {check_name} --scan {check_path} -o {output}'
         os.system(shell)
+        return output
     except Exception as e:
         logger.error('执行扫描任务失败！！！')
         logger.error(e)
-        return 'Execution task exception !!!'
-    return output
+        raise 'Execution task exception !!!'
 
+def xray_shell(xray_address: str, types: str) -> str:
+    """
+    扫描脚本
+    :param xray_address:  扫描地址
+    :param check_name: 扫描名称
+    :return:
+    """
+
+    output = get_photo_xraypath()
+
+    try:
+        logger.info('开始执行sql注入扫描任务!!!')
+        shell_path = os.path.abspath('.') + settings.XRAY_SHELL_PATH
+
+        if types == 'servicescan':  # servicescan
+            shell = f"{shell_path} servicescan --target {xray_address} --html-output {output}"
+            logger.warning(shell)
+        elif types == 'webscan':
+            shell = f"{shell_path} webscan --url {xray_address} --html-output {output}"
+            logger.warning(shell)
+        else:  # webscan
+            raise f'Execution task fail not type! {types} '
+        os.system(shell)
+        return output
+    except Exception as e:
+        logger.error('执行扫描任务失败！！！')
+        logger.error(e)
+        raise 'Execution task exception !!!'
 
 # 异步任务立刻执行脚本 任务
 @shared_task
-def check_shell_task(check_path, check_name):
+def check_shell_task(check_path: str, check_name: str):
     """
     执行扫描任务脚本任务
     :param check_path:  项目扫描路径
@@ -46,6 +94,18 @@ def check_shell_task(check_path, check_name):
     :return:
     """
     return check_shell(check_path, check_name)
+
+
+# sql注入异步任务立刻执行脚本 任务
+@shared_task
+def xray_shell_task(xray_address: str, types: str):
+    """
+    执行sql websan扫描任务脚本任务
+    :param xray_address:  url 服务器地址
+    :param types: 扫描类型   空=servicescan  ！=空 =webscan
+    :return:
+    """
+    return xray_shell(xray_address, types)
 
 
 # 定时任务
@@ -64,11 +124,16 @@ def update_checktask_table_task():
             for task in task_obj:
                 # 查询出 任务结果表 task_id 等于任务表的task_id
                 task_result_obj = TaskResult.objects.filter(task_id=task.task_id)
-                if task_result_obj.count()!= 0:
+                if task_result_obj.count() != 0:
                     for result in task_result_obj:
                         task.task_state = 'finish'
                         task.task_results = result.status
-                        task.task_report = result.result.replace('"', '')
+                        task_report = result.result.replace('"', '')
+
+                        if not os.path.exists(task_report):  # 如果文件不存在就写NO
+                            task_report = 'NO'
+
+                        task.task_report = task_report
                         task.task_end_time = result.date_done
                         task.task_msg = result.status
                     task.save()
@@ -82,7 +147,7 @@ def update_checktask_table_task():
         return 'update_checktask_table_task abnormal'
 
 
-# # 定时任务
+# # 定时任务 删除结果表的状态
 @shared_task
 def delete_result_data_task():
     """
